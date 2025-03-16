@@ -4,6 +4,6 @@ module com.tcgshop.tradingcardgameshop {
     requires java.desktop;
 
 
-    opens com.tcgshop.tradingcardgameshop to javafx.fxml;
-    exports com.tcgshop.tradingcardgameshop;
+    opens tcgshop to javafx.fxml;
+    exports tcgshop;
 }
