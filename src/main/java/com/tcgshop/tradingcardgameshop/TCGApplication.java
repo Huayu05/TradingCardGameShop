@@ -1,5 +1,6 @@
 package com.tcgshop.tradingcardgameshop;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -19,40 +20,54 @@ public class TCGApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        changeWindowOne();
+        Scene scene = changeWindowOne();
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch();
     }
 
-    public void changeWindowOne() {
+    public Scene changeWindowOne() {
         Label label = new Label("'A Login Page'");
         Button button = new Button("Login");
+        Scene scene = new Scene(new VBox(label, button), 300, 200);
+
         button.setOnAction(e -> {
-            PauseTransition pause = new PauseTransition(Duration.seconds(2));
-            pause.setOnFinished(event -> {
-                changeWindowTwo();
-            });
-            pause.play();
+            switchScene(scene, changeWindowTwo());
         });
 
-        Scene scene = new Scene(new VBox(label, button), 300, 200);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        return scene;
     }
 
-    public void changeWindowTwo() {
+    public Scene changeWindowTwo() {
         Label label = new Label("Welcome to the Trading Card Game Shop!");
         Button button = new Button("Logout");
-        button.setOnAction(e -> {
-            changeWindowOne();
-        });
-
         VBox root = new VBox(label, button);
         root.setStyle("-fx-background-color: lightblue;");
         Scene scene = new Scene(root, 300, 200);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        button.setOnAction(e -> {
+            switchScene(scene, changeWindowOne());
+        });
+
+        return scene;
+    }
+
+    private void switchScene(Scene currentScene, Scene newScene) {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), currentScene.getRoot());
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            primaryStage.setScene(newScene); // Switch scenes
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newScene.getRoot());
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
+        });
+
+        fadeOut.play();
     }
 }
