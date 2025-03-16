@@ -1,73 +1,77 @@
 package com.tcgshop.tradingcardgameshop;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import javafx.util.Duration;
 
 public class TCGApplication extends Application {
-    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        Scene scene = changeWindowOne();
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
+        // Root container
+        Pane root = new Pane();
 
-    public static void main(String[] args) {
-        launch();
-    }
+        // Login Pane (Left)
+        StackPane loginPane = new StackPane();
+        loginPane.setStyle("-fx-background-color: lightgray;");
+        loginPane.setPrefSize(250, 300);
+        loginPane.setLayoutX(50);
+        loginPane.setLayoutY(50);
+        Text loginText = new Text("Login");
+        loginPane.getChildren().add(loginText);
 
-    public Scene changeWindowOne() {
-        Label label = new Label("'A Login Page'");
-        Button button = new Button("Login");
-        Scene scene = new Scene(new VBox(label, button), 300, 200);
+        // Sign Up Pane (Right, will slide left)
+        StackPane signupPane = new StackPane();
+        signupPane.setStyle("-fx-background-color: lightblue;");
+        signupPane.setPrefSize(250, 300);
+        signupPane.setLayoutX(350);
+        signupPane.setLayoutY(50);
+        Text signupText = new Text("Sign Up");
+        signupPane.getChildren().add(signupText);
 
-        button.setOnAction(e -> {
-            switchScene(scene, changeWindowTwo());
-        });
+        // Button to trigger animation
+        Button signUpButton = new Button("Sign Up");
+        signUpButton.setLayoutX(150);
+        signUpButton.setLayoutY(400);
 
+        // Animation when clicking "Sign Up"
+        signUpButton.setOnAction(e -> {
+            // Move signupPane left
+            TranslateTransition movePane = new TranslateTransition(Duration.seconds(1), signupPane);
+            movePane.setByX(-300);
+            movePane.play();
 
-        return scene;
-    }
+            // Fade out login text
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), loginText);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.play();
 
-    public Scene changeWindowTwo() {
-        Label label = new Label("Welcome to the Trading Card Game Shop!");
-        Button button = new Button("Logout");
-        VBox root = new VBox(label, button);
-        root.setStyle("-fx-background-color: lightblue;");
-        Scene scene = new Scene(root, 300, 200);
-
-        button.setOnAction(e -> {
-            switchScene(scene, changeWindowOne());
-        });
-
-        return scene;
-    }
-
-    private void switchScene(Scene currentScene, Scene newScene) {
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), currentScene.getRoot());
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> {
-            primaryStage.setScene(newScene); // Switch scenes
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newScene.getRoot());
+            // Fade in signup text
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), signupText);
             fadeIn.setFromValue(0.0);
             fadeIn.setToValue(1.0);
             fadeIn.play();
         });
 
-        fadeOut.play();
+        // Add elements to root
+        root.getChildren().addAll(loginPane, signupPane, signUpButton);
+
+        // Set up scene and stage
+        Scene scene = new Scene(root, 600, 500);
+        primaryStage.setTitle("Login to Sign Up Animation");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
