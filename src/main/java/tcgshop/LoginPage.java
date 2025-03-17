@@ -12,6 +12,7 @@ class LoginPage extends Scene {
     private Image bgImage;
     private ImageView bgImageView;
     private StackPane loginMain;
+    private SignInPane signInPane;
 
     // Constructor
     public LoginPage() {
@@ -39,7 +40,8 @@ class LoginPage extends Scene {
         StackPane.setMargin(loginMain, new Insets(20));
 
         // Signin Pane
-        SignInPane signInPane = new SignInPane();
+        signInPane = new SignInPane();
+        signInPane.prefHeightProperty().bind(loginMain.heightProperty());
         loginMain.getChildren().add(signInPane);
     }
 }
