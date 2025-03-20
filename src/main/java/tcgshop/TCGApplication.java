@@ -10,8 +10,8 @@ public class TCGApplication extends Application {
         LoginPage loginPage = new LoginPage();
         primaryStage.setScene(loginPage);
         primaryStage.setTitle("TCG Shop");
-        primaryStage.setMinHeight(430);
-        primaryStage.setMinWidth(650);
+        primaryStage.setMinHeight(500);
+        primaryStage.setMinWidth(800);
         primaryStage.show();
     }
 

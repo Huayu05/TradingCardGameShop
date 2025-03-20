@@ -2,7 +2,6 @@ package tcgshop;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -10,24 +9,24 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-public class SignInPane extends GridPane {
+public class LogInPane extends GridPane {
     // Class Attributes
     private Pane blank;
-    private VBox signInVBox;
-    private StackPane signInStackPane;
+    private VBox logInVBox;
+    private StackPane logInStackPane;
 
     // Constructor
-    public SignInPane() {
+    public LogInPane() {
         // Call constructor from parent class
         super();
 
 
-        // Contents in the signInVBox
-        Label topic = new Label("Create an Account");
+        // Contents in the logInVBox
+        Label topic = new Label("Log In Account");
         topic.setFont(Font.font("Verdana", 30));
         VBox.setMargin(topic, new Insets(20, 0, 5, 0));
 
-        Label subtopic = new Label("Let's begin to start your journey at here!");
+        Label subtopic = new Label("Welcome back and ready to continue your journey!");
         subtopic.setFont(Font.font("Verdana", 10));
         VBox.setMargin(subtopic, new Insets(0, 0, 30, 0));
 
@@ -41,33 +40,27 @@ public class SignInPane extends GridPane {
         password.setMaxWidth(200);
         VBox.setMargin(password, new Insets(0, 0, 10, 0));
 
-        ComboBox<String> role = new ComboBox<>();
-        role.setPromptText(" - Choose Your Role - ");
-        role.getItems().addAll("User", "Admin");
-        role.setMaxWidth(200);
-        VBox.setMargin(role, new Insets(0, 0, 10, 0));
-
-        Button signInButton = new Button("Sign In");
-        VBox.setMargin(signInButton, new Insets(10, 0, 0, 0));
+        Button logInButton = new Button("Log In");
+        VBox.setMargin(logInButton, new Insets(10, 0, 0, 0));
 
 
         Label errorRespond = new Label();
 
-        // signInVBox Config
-        signInVBox = new VBox();
-        signInVBox.getChildren().addAll(topic, subtopic, username, password, role, signInButton, errorRespond);
-        signInVBox.setAlignment(Pos.CENTER);
+        // logInVBox Config
+        logInVBox = new VBox();
+        logInVBox.getChildren().addAll(topic, subtopic, username, password, logInButton, errorRespond);
+        logInVBox.setAlignment(Pos.CENTER);
 
 
-        // signInStackPane Config
-        signInStackPane = new StackPane();
-        signInStackPane.getChildren().add(signInVBox);
-        signInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
-        this.add(signInStackPane, 1, 0);
+        // logInStackPane Config
+        logInStackPane = new StackPane();
+        logInStackPane.getChildren().add(logInVBox);
+        logInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
+        this.add(logInStackPane, 0, 0);
 
-        // SignInPane config, with a blank at left
+        // LogInPane config, with a blank at left
         blank = new Pane();
-        this.add(blank, 0, 0);
+        this.add(blank, 1, 0);
 
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(50);
@@ -83,13 +76,13 @@ public class SignInPane extends GridPane {
 
 
         // Button Functions
-        signInButton.setOnAction(e -> {
+        logInButton.setOnAction(e -> {
             // button function
             errorRespond.setText("Just testing");
         });
     }
 
-    public void displaySignIn() {
+    public void displayLogIn() {
         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         pause.setOnFinished(e -> {
             FadeTransition fadeIn = new FadeTransition(Duration.millis(500), this);
@@ -100,7 +93,7 @@ public class SignInPane extends GridPane {
         pause.play();
     }
 
-    public void disappearSignIn() {
+    public void disappearLogIn() {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(200), this);
         fadeOut.setFromValue(1);
         fadeOut.setToValue(0);
