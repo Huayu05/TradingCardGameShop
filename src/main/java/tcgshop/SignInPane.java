@@ -7,7 +7,11 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
 public class SignInPane extends GridPane {
+    private Button signInButton;
     private Label errorRespond;
+    private TextField username;
+    private PasswordField password;
+    private ComboBox<String> role;
 
     // Constructor
     public SignInPane() {
@@ -24,23 +28,23 @@ public class SignInPane extends GridPane {
         subtopic.setFont(Font.font("Verdana", 10));
         VBox.setMargin(subtopic, new Insets(0, 0, 30, 0));
 
-        TextField username = new TextField();
+        username = new TextField();
         username.setPromptText("Username");
         username.setMaxWidth(200);
         VBox.setMargin(username, new Insets(0, 0, 10, 0));
 
-        PasswordField password = new PasswordField();
+         password = new PasswordField();
         password.setPromptText("Password");
         password.setMaxWidth(200);
         VBox.setMargin(password, new Insets(0, 0, 10, 0));
 
-        ComboBox<String> role = new ComboBox<>();
+        role = new ComboBox<>();
         role.setPromptText(" - Choose Your Role - ");
         role.getItems().addAll("User", "Admin");
         role.setMaxWidth(200);
         VBox.setMargin(role, new Insets(0, 0, 10, 0));
 
-        Button signInButton = new Button("Sign In");
+        signInButton = new Button("Sign In");
         VBox.setMargin(signInButton, new Insets(10, 0, 0, 0));
 
 
@@ -74,16 +78,18 @@ public class SignInPane extends GridPane {
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
         this.setMaxHeight(300);
-
-
-        // Button Functions
-        signInButton.setOnAction(_ -> {
-            // button function
-            errorRespond.setText("Just testing");
-        });
     }
 
-    // Getter Method
+    // Retrieve user input
+    public String[] getInput() {
+        return new String[] {username.getText(), password.getText(), role.getValue()};
+    }
+
+    // Getter Method for Button
+    public Button getSignInButton() {
+        return signInButton;
+    }
+    // Getter Method for Respond
     public Label getErrorRespond() {
         return errorRespond;
     }
