@@ -1,25 +1,18 @@
 package tcgshop;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
 
 public class LogInPane extends GridPane {
-    // Class Attributes
-    private Pane blank;
-    private VBox logInVBox;
-    private StackPane logInStackPane;
+    private Label errorRespond;
 
     // Constructor
     public LogInPane() {
         // Call constructor from parent class
         super();
-
 
         // Contents in the logInVBox
         Label topic = new Label("Log In Account");
@@ -44,22 +37,23 @@ public class LogInPane extends GridPane {
         VBox.setMargin(logInButton, new Insets(10, 0, 0, 0));
 
 
-        Label errorRespond = new Label();
+        errorRespond = new Label();
 
         // logInVBox Config
-        logInVBox = new VBox();
+        VBox logInVBox = new VBox();
         logInVBox.getChildren().addAll(topic, subtopic, username, password, logInButton, errorRespond);
         logInVBox.setAlignment(Pos.CENTER);
 
 
         // logInStackPane Config
-        logInStackPane = new StackPane();
+        StackPane logInStackPane = new StackPane();
         logInStackPane.getChildren().add(logInVBox);
         logInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
         this.add(logInStackPane, 0, 0);
 
         // LogInPane config, with a blank at left
-        blank = new Pane();
+        // Class Attributes
+        Pane blank = new Pane();
         this.add(blank, 1, 0);
 
         ColumnConstraints col1 = new ColumnConstraints();
@@ -76,27 +70,15 @@ public class LogInPane extends GridPane {
 
 
         // Button Functions
-        logInButton.setOnAction(e -> {
-            // button function
+        logInButton.setOnAction(_ -> {
             errorRespond.setText("Just testing");
+            System.out.println(username.getText());
+            System.out.println(password.getText());
         });
     }
 
-    public void displayLogIn() {
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-        pause.setOnFinished(e -> {
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), this);
-            fadeIn.setFromValue(0);
-            fadeIn.setToValue(1);;
-            fadeIn.play();
-        });
-        pause.play();
-    }
-
-    public void disappearLogIn() {
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), this);
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.play();
+    // Getter Method
+    public Label getErrorRespond() {
+        return errorRespond;
     }
 }

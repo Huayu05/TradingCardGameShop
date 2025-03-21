@@ -1,14 +1,13 @@
 package tcgshop;
 
-import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.util.Duration;
+
+import java.util.Objects;
 
 class LoginPage extends Scene {
     private boolean nowSignIn = true;
@@ -22,7 +21,7 @@ class LoginPage extends Scene {
         StackPane loginPageRoot = (StackPane) getRoot();
 
         // Background Image
-        Image bgImage = new Image(getClass().getResource("/tcgshop/images/pokeball_background_picture.png").toExternalForm());
+        Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());
         ImageView bgImageView = new ImageView(bgImage);
         bgImageView.setPreserveRatio(false);
         bgImageView.fitWidthProperty().bind(loginPageRoot.widthProperty());
@@ -38,29 +37,29 @@ class LoginPage extends Scene {
         loginPageRoot.getChildren().add(loginMain);
         StackPane.setMargin(loginMain, new Insets(20));
 
-        // Signin Pane
-        SignInPane signInPane = new SignInPane();
-        signInPane.prefHeightProperty().bind(loginMain.heightProperty());
-        loginMain.getChildren().add(signInPane);
-
         // Login Pane
         LogInPane logInPane = new LogInPane();
         logInPane.prefHeightProperty().bind(loginMain.heightProperty());
         logInPane.setOpacity(0);
         loginMain.getChildren().add(logInPane);
 
+        // Signin Pane
+        SignInPane signInPane = new SignInPane();
+        signInPane.prefHeightProperty().bind(loginMain.heightProperty());
+        loginMain.getChildren().add(signInPane);
+
         // Moving Pane
         MovingPane movingPane = new MovingPane();
-        movingPane.changeSide.setOnAction(e -> {
+        movingPane.changeSide.setOnAction(_ -> {
             nowSignIn = !nowSignIn;
             movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignIn);
             if (nowSignIn) {
-                logInPane.disappearLogIn();
-                signInPane.displaySignIn();
+                GeneralFunction.disappearPane(logInPane, logInPane.getErrorRespond());
+                GeneralFunction.displayPane(signInPane);
             }
             else {
-                logInPane.displayLogIn();
-                signInPane.disappearSignIn();
+                GeneralFunction.disappearPane(signInPane, signInPane.getErrorRespond());
+                GeneralFunction.displayPane(logInPane);
             }
 
         });

@@ -10,9 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
 
 public class MovingPane extends VBox {
     // Class Attribute
@@ -37,18 +35,18 @@ public class MovingPane extends VBox {
         TranslateTransition transition = new TranslateTransition(Duration.millis(1000), this);
         double distance = stackPaneWidth - this.getWidth() - stackPanePadding * 2;
         transition.setByX(nowLeft ? -distance : distance);
-        transition.setOnFinished(event -> {
+        transition.setOnFinished(_ -> {
             StackPane.setAlignment(this, nowLeft ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
             this.setTranslateX(0);
         });
         transition.play();
 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
-        pause.setOnFinished(e -> {
+        pause.setOnFinished(_ -> {
             FadeTransition fadeOut1 = new FadeTransition(Duration.millis(400), title);
             fadeOut1.setFromValue(1);
             fadeOut1.setToValue(0);
-            fadeOut1.setOnFinished(event -> {
+            fadeOut1.setOnFinished(_ -> {
                 title.setText(nowLeft ? "Welcome Back" : "Nice to meet you");
                 FadeTransition fadeIn = new FadeTransition(Duration.millis(400), title);
                 fadeIn.setFromValue(0);
@@ -59,7 +57,7 @@ public class MovingPane extends VBox {
             FadeTransition fadeOut2 = new FadeTransition(Duration.millis(400), subtitle);
             fadeOut2.setFromValue(1);
             fadeOut2.setToValue(0);
-            fadeOut2.setOnFinished(event -> {
+            fadeOut2.setOnFinished(_ -> {
                 subtitle.setText(nowLeft ? "Have an account already?" : "Doesn't have an account?");
                 FadeTransition fadeIn = new FadeTransition(Duration.millis(400), subtitle);
                 fadeIn.setFromValue(0);
@@ -70,7 +68,7 @@ public class MovingPane extends VBox {
             FadeTransition fadeOut3 = new FadeTransition(Duration.millis(400), changeSide);
             fadeOut3.setFromValue(1);
             fadeOut3.setToValue(0);
-            fadeOut3.setOnFinished(event -> {
+            fadeOut3.setOnFinished(_ -> {
                 changeSide.setText(nowLeft ? "Log In" : "Sign Up");
                 FadeTransition fadeIn = new FadeTransition(Duration.millis(400), changeSide);
                 fadeIn.setFromValue(0);

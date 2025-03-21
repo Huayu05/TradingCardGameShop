@@ -1,20 +1,13 @@
 package tcgshop;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
 
 public class SignInPane extends GridPane {
-    // Class Attributes
-    private Pane blank;
-    private VBox signInVBox;
-    private StackPane signInStackPane;
+    private Label errorRespond;
 
     // Constructor
     public SignInPane() {
@@ -51,22 +44,23 @@ public class SignInPane extends GridPane {
         VBox.setMargin(signInButton, new Insets(10, 0, 0, 0));
 
 
-        Label errorRespond = new Label();
+        errorRespond = new Label();
 
         // signInVBox Config
-        signInVBox = new VBox();
+        VBox signInVBox = new VBox();
         signInVBox.getChildren().addAll(topic, subtopic, username, password, role, signInButton, errorRespond);
         signInVBox.setAlignment(Pos.CENTER);
 
 
         // signInStackPane Config
-        signInStackPane = new StackPane();
+        StackPane signInStackPane = new StackPane();
         signInStackPane.getChildren().add(signInVBox);
         signInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
         this.add(signInStackPane, 1, 0);
 
         // SignInPane config, with a blank at left
-        blank = new Pane();
+        // Class Attributes
+        Pane blank = new Pane();
         this.add(blank, 0, 0);
 
         ColumnConstraints col1 = new ColumnConstraints();
@@ -83,27 +77,14 @@ public class SignInPane extends GridPane {
 
 
         // Button Functions
-        signInButton.setOnAction(e -> {
+        signInButton.setOnAction(_ -> {
             // button function
             errorRespond.setText("Just testing");
         });
     }
 
-    public void displaySignIn() {
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-        pause.setOnFinished(e -> {
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), this);
-            fadeIn.setFromValue(0);
-            fadeIn.setToValue(1);;
-            fadeIn.play();
-        });
-        pause.play();
-    }
-
-    public void disappearSignIn() {
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), this);
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.play();
+    // Getter Method
+    public Label getErrorRespond() {
+        return errorRespond;
     }
 }

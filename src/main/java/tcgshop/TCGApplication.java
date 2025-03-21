@@ -7,8 +7,12 @@ public class TCGApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // Login Page Initialize
         LoginPage loginPage = new LoginPage();
         primaryStage.setScene(loginPage);
+
+
+
         primaryStage.setTitle("TCG Shop");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(800);
