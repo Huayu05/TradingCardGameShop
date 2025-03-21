@@ -2,7 +2,6 @@ package tcgshop;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
@@ -18,10 +17,8 @@ public class GeneralFunction {
         pause.play();
     }
 
-    public static void disappearPane(GridPane gridPane, Label label) {
+    public static void disappearPane(GridPane gridPane) {
         gridPane.toBack();
-        label.setText("");
-
         FadeTransition fadeOut = new FadeTransition(Duration.millis(200), gridPane);
         fadeOut.setFromValue(1);
         fadeOut.setToValue(0);

@@ -8,6 +8,8 @@ public class SQLConnector {
     private static final String PASSWORD = "";
     private Connection conn;
 
+    private String userType;
+
     public SQLConnector() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -17,6 +19,17 @@ public class SQLConnector {
             System.out.println(e);
         }
     }
+
+    public String login(String username, String password) {
+        if (compareUsers(username, password)) {
+
+            return userType;
+        }
+        else {
+            return "false";
+        }
+    }
+
     public boolean addUser(String username, String password, String type) {
         if (compareUsers(username, password)) {
             return false;
@@ -41,6 +54,7 @@ public class SQLConnector {
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 if (rs.getString("Username").equals(username) && rs.getString("Password").equals(password)) {
+                    userType = rs.getString("UserType");
                     return true;
                 }
             }

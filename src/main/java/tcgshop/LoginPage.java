@@ -13,6 +13,7 @@ import java.util.Objects;
 class LoginPage extends Scene {
     private boolean nowSignIn = true;
     private SignInPane signInPane;
+    private LogInPane logInPane;
 
     // Constructor
     public LoginPage() {
@@ -40,7 +41,7 @@ class LoginPage extends Scene {
         StackPane.setMargin(loginMain, new Insets(20));
 
         // Login Pane Setup
-        LogInPane logInPane = new LogInPane();
+        logInPane = new LogInPane();
         logInPane.prefHeightProperty().bind(loginMain.heightProperty());
         logInPane.setOpacity(0);
         loginMain.getChildren().add(logInPane);
@@ -64,12 +65,13 @@ class LoginPage extends Scene {
         movingPane.changeSide.setOnAction(_ -> {
             nowSignIn = !nowSignIn;
             movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignIn);
+            signInPane.reset();
             if (nowSignIn) {
-                GeneralFunction.disappearPane(logInPane, logInPane.getErrorRespond());
+                GeneralFunction.disappearPane(logInPane);
                 GeneralFunction.displayPane(signInPane);
             }
             else {
-                GeneralFunction.disappearPane(signInPane, signInPane.getErrorRespond());
+                GeneralFunction.disappearPane(signInPane);
                 GeneralFunction.displayPane(logInPane);
             }
         });
@@ -78,6 +80,11 @@ class LoginPage extends Scene {
         signInPane.getSignInButton().setOnAction(_ -> {
 
         });
+    }
+
+    // Getter Method for log in pane
+    public LogInPane getLogInPane() {
+        return logInPane;
     }
 
     // Getter Method for Sign In Pane

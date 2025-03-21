@@ -49,6 +49,7 @@ public class SignInPane extends GridPane {
 
 
         errorRespond = new Label();
+        errorRespond.setStyle("-fx-text-fill: red;");
 
         // signInVBox Config
         VBox signInVBox = new VBox();
@@ -83,6 +84,16 @@ public class SignInPane extends GridPane {
     // Retrieve user input
     public String[] getInput() {
         return new String[] {username.getText(), password.getText(), role.getValue()};
+    }
+
+    // Reset all input
+    public void reset() {
+        username.setText("");
+        password.setText("");
+        role.getSelectionModel().clearSelection();
+        role.setValue(null);
+        role.setPromptText(" - Choose Your Role - ");
+        errorRespond.setText("");
     }
 
     // Getter Method for Button

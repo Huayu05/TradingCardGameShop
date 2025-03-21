@@ -7,7 +7,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
 public class LogInPane extends GridPane {
+    private Button logInButton;
     private Label errorRespond;
+    private TextField username;
+    private PasswordField password;
 
     // Constructor
     public LogInPane() {
@@ -23,17 +26,17 @@ public class LogInPane extends GridPane {
         subtopic.setFont(Font.font("Verdana", 10));
         VBox.setMargin(subtopic, new Insets(0, 0, 30, 0));
 
-        TextField username = new TextField();
+        username = new TextField();
         username.setPromptText("Username");
         username.setMaxWidth(200);
         VBox.setMargin(username, new Insets(0, 0, 10, 0));
 
-        PasswordField password = new PasswordField();
+        password = new PasswordField();
         password.setPromptText("Password");
         password.setMaxWidth(200);
         VBox.setMargin(password, new Insets(0, 0, 10, 0));
 
-        Button logInButton = new Button("Log In");
+        logInButton = new Button("Log In");
         VBox.setMargin(logInButton, new Insets(10, 0, 0, 0));
 
 
@@ -67,17 +70,26 @@ public class LogInPane extends GridPane {
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
         this.setMaxHeight(300);
-
-
-        // Button Functions
-        logInButton.setOnAction(_ -> {
-            errorRespond.setText("Just testing");
-            System.out.println(username.getText());
-            System.out.println(password.getText());
-        });
     }
 
-    // Getter Method
+    // Retrieve user input
+    public String[] getInput() {
+        return new String[] {username.getText(), password.getText()};
+    }
+
+    // Reset all input
+    public void reset() {
+        username.setText("");
+        password.setText("");
+        errorRespond.setText("");
+    }
+
+    // Getter Method for Button
+    public Button getLogInButton() {
+        return logInButton;
+    }
+
+    // Getter Method for Respond
     public Label getErrorRespond() {
         return errorRespond;
     }
