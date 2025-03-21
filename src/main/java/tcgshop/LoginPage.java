@@ -3,7 +3,6 @@ package tcgshop;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -33,7 +32,7 @@ class LoginPage extends Scene {
 
         // Main Login and Signin Container
         StackPane loginMain = new StackPane();
-        loginMain.setStyle("-fx-background-color: #FFFDE7;-fx-background-radius: 20px;");
+        loginMain.setStyle("-fx-background-color: #FFFDE7;-fx-background-radius: 20px;-fx-effect: dropshadow(gaussian, #0000006F, 30, 0.5, 0, 0);");
         loginMain.setMinSize(600, 360);
         loginMain.setMaxSize(900, 540);
         loginMain.setPadding(new Insets(0, 50, 0 ,50));
@@ -54,15 +53,15 @@ class LoginPage extends Scene {
         // Moving Pane
         MovingPane movingPane = new MovingPane();
         movingPane.prefHeightProperty().bind(loginMain.heightProperty());
-        movingPane.prefWidthProperty().bind(loginMain.widthProperty().multiply(0.35));
-        movingPane.maxWidthProperty().bind(loginMain.widthProperty().multiply(0.35));
+        movingPane.prefWidthProperty().bind(loginMain.widthProperty().multiply(0.38));
+        movingPane.maxWidthProperty().bind(loginMain.widthProperty().multiply(0.38));
         StackPane.setAlignment(movingPane, Pos.CENTER_LEFT);
         loginMain.getChildren().add(movingPane);
 
 
         // Button Function Setup
         // Switch between login and signup
-        movingPane.changeSide.setOnAction(_ -> {
+        movingPane.getChangeSide().setOnAction(_ -> {
             nowSignIn = !nowSignIn;
             movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignIn);
             signInPane.reset();

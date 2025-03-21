@@ -33,7 +33,7 @@ public class SignInPane extends GridPane {
         username.setMaxWidth(200);
         VBox.setMargin(username, new Insets(0, 0, 10, 0));
 
-         password = new PasswordField();
+        password = new PasswordField();
         password.setPromptText("Password");
         password.setMaxWidth(200);
         VBox.setMargin(password, new Insets(0, 0, 10, 0));

@@ -20,6 +20,7 @@ public class LogInPane extends GridPane {
         // Contents in the logInVBox
         Label topic = new Label("Log In Account");
         topic.setFont(Font.font("Verdana", 30));
+        topic.setStyle("-fx-font-weight: bold;");
         VBox.setMargin(topic, new Insets(20, 0, 5, 0));
 
         Label subtopic = new Label("Welcome back and ready to continue your journey!");
