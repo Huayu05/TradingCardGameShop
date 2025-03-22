@@ -9,6 +9,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -22,24 +24,23 @@ public class MovingPane extends VBox {
     public MovingPane() {
         // Big title change depends on which side
         title = new Label("Welcome Back");
-        VBox.setMargin(title, new Insets(0, 0, 10, 0));
+        VBox.setMargin(title, new Insets(0, 0, 15, 0));
         title.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 28;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;" +
-                "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0.3, 0, 0)"
+                "-fx-text-fill: #000000D0;" +
+                "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
 
         // Subtitle change depends on which side
         subtitle = new Label("Have an account already?");
-        VBox.setMargin(subtitle, new Insets(0, 0, 40, 0));
+        VBox.setMargin(subtitle, new Insets(0, 0, 30, 0));
         subtitle.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 16;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;" +
-                "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0.3, 0, 0)"
+                "-fx-text-fill: #000000D0;" +
+                "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
 
         // A switch side button
@@ -62,7 +63,7 @@ public class MovingPane extends VBox {
         this.setPadding(new Insets(100, 0, 100, 0));
         this.setAlignment(Pos.CENTER);
         this.setStyle(
-                "-fx-background-color: #B3D8A8;" +
+                "-fx-background-color: linear-gradient(to bottom, #B3D8A8, #d0efc8);" +
                 "-fx-background-radius: 20px;" +
                 "-fx-effect: dropshadow(gaussian, #0000007F, 10, 0.3, 0, 0);"
         );
@@ -74,30 +75,28 @@ public class MovingPane extends VBox {
         // VBox moving animation
         TranslateTransition transition = new TranslateTransition(Duration.millis(1000), this);
         double distance = stackPaneWidth - this.getWidth() - stackPanePadding * 2;
+        changeSide.setDisable(true);
         transition.setByX(nowLeft ? -distance : distance);
         transition.setOnFinished(_ -> {
             StackPane.setAlignment(this, nowLeft ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
             this.setTranslateX(0);
+            changeSide.setDisable(false);
         });
         transition.play();
 
-        // Delayed animation for text changing
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
-        pause.setOnFinished(_ -> {
-            ParallelTransition parallelTransition = new ParallelTransition(
-                    fadeTextChange(title, nowLeft ? "Welcome Back" : "Welcome Aboard"),
-                    fadeTextChange(subtitle, nowLeft ? "Have an account already?" : "Doesn't have an account?"),
-                    fadeTextChange(changeSide, nowLeft ? "Log In" : "Sign Up")
-            );
-            parallelTransition.play();
-        });
-        pause.play();
+        // Parallel start all transition
+        ParallelTransition parallelTransition = new ParallelTransition(
+            fadeTextChange(title, nowLeft ? "Welcome Back" : "Welcome Aboard"),
+            fadeTextChange(subtitle, nowLeft ? "Have an account already?" : "Doesn't have an account?"),
+            fadeTextChange(changeSide, nowLeft ? "Log In" : "Sign Up")
+        );
+        parallelTransition.play();
     }
 
 
-    // Fade changing animation
+    // Text fade changing animation
     private FadeTransition fadeTextChange(Labeled node, String newText) {
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(400), node);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), node);
         fadeOut.setFromValue(1);
         fadeOut.setToValue(0);
         fadeOut.setOnFinished(_ -> {

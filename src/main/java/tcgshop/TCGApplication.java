@@ -28,7 +28,7 @@ public class TCGApplication extends Application {
 
         // Login Page Initialize
         loginPage = new LoginPage();
-        loginPage.getSignInPane().getSignInButton().setOnAction(event -> {
+        loginPage.getSignInPane().getSignUpButton().setOnAction(event -> {
             String[] data = loginPage.getSignInPane().getInput();
             if (data[0].isEmpty() || data[1].isEmpty() || data[2] == null) {
                 loginPage.getSignInPane().getErrorRespond().setText("Please fill all information!");

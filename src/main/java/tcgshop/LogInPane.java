@@ -4,9 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 
 public class LogInPane extends GridPane {
+    // Nodes needed interact from outside class
     private Button logInButton;
     private Label errorRespond;
     private TextField username;
@@ -17,37 +17,59 @@ public class LogInPane extends GridPane {
         // Call constructor from parent class
         super();
 
-        // Contents in the logInVBox
-        Label topic = new Label("Log In Account");
-        topic.setFont(Font.font("Verdana", 30));
-        topic.setStyle("-fx-font-weight: bold;");
-        VBox.setMargin(topic, new Insets(20, 0, 5, 0));
+        // Topic label
+        Label title = new Label("Log In Account");
+        title.setStyle(
+                "-fx-font-family: Verdana;" +
+                "-fx-font-size: 34;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #4A3B2F;" +
+                "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
+        );
+        VBox.setMargin(title, new Insets(0, 0, 10, 0));
 
-        Label subtopic = new Label("Welcome back and ready to continue your journey!");
-        subtopic.setFont(Font.font("Verdana", 10));
-        VBox.setMargin(subtopic, new Insets(0, 0, 30, 0));
+        // Subtitle label
+        Label subtitle = new Label("Welcome back and continue your journey here!");
+        subtitle.setStyle(
+                "-fx-font-family: Verdana;" +
+                "-fx-font-size: 12;" +
+                "-fx-text-fill: #4A3B2F;" +
+                "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
+        );
+        VBox.setMargin(subtitle, new Insets(0, 0, 25, 0));
 
+        // Username input text field
         username = new TextField();
         username.setPromptText("Username");
         username.setMaxWidth(200);
         VBox.setMargin(username, new Insets(0, 0, 10, 0));
 
+        // Password input password field
         password = new PasswordField();
         password.setPromptText("Password");
         password.setMaxWidth(200);
-        VBox.setMargin(password, new Insets(0, 0, 10, 0));
+        VBox.setMargin(password, new Insets(0, 0, 25, 0));
 
+        // Submit button for login
         logInButton = new Button("Log In");
-        VBox.setMargin(logInButton, new Insets(10, 0, 0, 0));
+        logInButton.setMinWidth(100);
+        logInButton.setStyle(
+            "-fx-font-size: 12px;" +
+            "-fx-background-radius: 5px;"
+        );
+        VBox.setMargin(logInButton, new Insets(0, 0, 5, 0));
 
-
+        // Respond label for button click
         errorRespond = new Label();
+        errorRespond.setStyle(
+                "-fx-font-family: Verdana;" +
+                "-fx-text-fill: #FF0000;"
+        );
 
         // logInVBox Config
         VBox logInVBox = new VBox();
-        logInVBox.getChildren().addAll(topic, subtopic, username, password, logInButton, errorRespond);
+        logInVBox.getChildren().addAll(title, subtitle, username, password, logInButton, errorRespond);
         logInVBox.setAlignment(Pos.CENTER);
-
 
         // logInStackPane Config
         StackPane logInStackPane = new StackPane();
@@ -55,11 +77,11 @@ public class LogInPane extends GridPane {
         logInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
         this.add(logInStackPane, 0, 0);
 
-        // LogInPane config, with a blank at left
-        // Class Attributes
+        // Blank pane for align left
         Pane blank = new Pane();
         this.add(blank, 1, 0);
 
+        // GridPane config
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(50);
         ColumnConstraints col2 = new ColumnConstraints();
@@ -67,7 +89,6 @@ public class LogInPane extends GridPane {
         col1.setHgrow(Priority.ALWAYS);
         col2.setHgrow(Priority.ALWAYS);
         this.getColumnConstraints().addAll(col1, col2);
-
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
         this.setMaxHeight(300);
@@ -85,12 +106,12 @@ public class LogInPane extends GridPane {
         errorRespond.setText("");
     }
 
-    // Getter Method for Button
+    // Getter Method ( Log In Button )
     public Button getLogInButton() {
         return logInButton;
     }
 
-    // Getter Method for Respond
+    // Getter Method ( Error Respond Label )
     public Label getErrorRespond() {
         return errorRespond;
     }

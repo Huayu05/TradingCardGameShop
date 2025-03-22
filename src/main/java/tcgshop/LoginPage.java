@@ -6,12 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-
 import java.util.Objects;
 
 class LoginPage extends Scene {
-    private boolean nowSignIn = true;
-    private SignInPane signInPane;
+    // Nodes needed interact from outside class
+    private boolean nowSignUp = true;
+    private SignUpPane signUpPane;
     private LogInPane logInPane;
 
     // Constructor
@@ -46,9 +46,9 @@ class LoginPage extends Scene {
         loginMain.getChildren().add(logInPane);
 
         // Signin Pane
-        signInPane = new SignInPane();
-        signInPane.prefHeightProperty().bind(loginMain.heightProperty());
-        loginMain.getChildren().add(signInPane);
+        signUpPane = new SignUpPane();
+        signUpPane.prefHeightProperty().bind(loginMain.heightProperty());
+        loginMain.getChildren().add(signUpPane);
 
         // Moving Pane
         MovingPane movingPane = new MovingPane();
@@ -62,21 +62,21 @@ class LoginPage extends Scene {
         // Button Function Setup
         // Switch between login and signup
         movingPane.getChangeSide().setOnAction(_ -> {
-            nowSignIn = !nowSignIn;
-            movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignIn);
-            signInPane.reset();
-            if (nowSignIn) {
+            nowSignUp = !nowSignUp;
+            movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignUp);
+            signUpPane.reset();
+            if (nowSignUp) {
                 GeneralFunction.disappearPane(logInPane);
-                GeneralFunction.displayPane(signInPane);
+                GeneralFunction.displayPane(signUpPane);
             }
             else {
-                GeneralFunction.disappearPane(signInPane);
+                GeneralFunction.disappearPane(signUpPane);
                 GeneralFunction.displayPane(logInPane);
             }
         });
 
         // Signup setting
-        signInPane.getSignInButton().setOnAction(_ -> {
+        signUpPane.getSignUpButton().setOnAction(_ -> {
 
         });
     }
@@ -87,7 +87,7 @@ class LoginPage extends Scene {
     }
 
     // Getter Method for Sign In Pane
-    public SignInPane getSignInPane() {
-        return signInPane;
+    public SignUpPane getSignInPane() {
+        return signUpPane;
     }
 }
