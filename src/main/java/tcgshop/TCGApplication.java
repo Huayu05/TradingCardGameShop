@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class TCGApplication extends Application {
@@ -20,16 +22,24 @@ public class TCGApplication extends Application {
         SQLConnector sql = new SQLConnector();
 
         // Shop Page Initialize
+        Label usernameLabel = new Label("Username: ");
+        Label passwordLabel = new Label("Password: ");
+        Label adminLabel = new Label("Admin: ");
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> {
             primaryStage.setScene(loginPage);
         });
-        Scene testScene = new Scene(backButton, 300, 300);
+        VBox vBox = new VBox(usernameLabel, passwordLabel, adminLabel, backButton);
+        Scene testScene = new Scene(vBox, 300, 300);
 
         // Login Page Initialize
         loginPage = new LoginPage();
+
+        // Sign in button action setup
         loginPage.getSignInPane().getSignUpButton().setOnAction(event -> {
             String[] data = loginPage.getSignInPane().getInput();
+
+            // Avoid empty data input
             if (data[0].isEmpty() || data[1].isEmpty() || data[2] == null) {
                 loginPage.getSignInPane().getErrorRespond().setText("Please fill all information!");
             }

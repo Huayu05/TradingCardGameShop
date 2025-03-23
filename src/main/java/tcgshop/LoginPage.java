@@ -59,8 +59,7 @@ class LoginPage extends Scene {
         loginMain.getChildren().add(movingPane);
 
 
-        // Button Function Setup
-        // Switch between login and signup
+        // Button switch between login and signup
         movingPane.getChangeSide().setOnAction(_ -> {
             nowSignUp = !nowSignUp;
             movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignUp);
@@ -74,19 +73,14 @@ class LoginPage extends Scene {
                 GeneralFunction.displayPane(logInPane);
             }
         });
-
-        // Signup setting
-        signUpPane.getSignUpButton().setOnAction(_ -> {
-
-        });
     }
 
-    // Getter Method for log in pane
+    // Getter Method ( Log In Pane )
     public LogInPane getLogInPane() {
         return logInPane;
     }
 
-    // Getter Method for Sign In Pane
+    // Getter Method ( Sign In Pane )
     public SignUpPane getSignInPane() {
         return signUpPane;
     }
