@@ -3,37 +3,59 @@ package tcgshop;
 import java.sql.*;
 
 public class SQLConnector {
+    // SQL connect attribute
     private static final String URL = "jdbc:mysql://localhost:3306/tcgshopdb";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private Connection conn;
 
-    private String userType;
-
+    // Constructor
     public SQLConnector() {
+        // Establish MySQL connection
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
         }
+
+        // Print error if failed
         catch (Exception e) {
-            System.out.println(e);
+            System.out.println("( MySQL Connection Failed )");
+            // DEBUG USE // System.out.println(e);
         }
     }
 
+    // Login method by return userType for validation or "false" if failed
     public String login(String username, String password) {
-        if (compareUsers(username, password)) {
+        // MySQL query find related username and password
+        String query = "SELECT * FROM user WHERE `Username` = ? AND `Password` = ?";
 
-            return userType;
+        // Try to prepare the statement and execute
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("UserType");
+                }
+            }
+            return "false";
         }
-        else {
+
+        // Print error if failed
+        catch (SQLException e) {
+            System.out.println("( MySQL Login Failed )");
             return "false";
         }
     }
 
+    // Sign up method
     public boolean addUser(String username, String password, String type) {
-        if (compareUsers(username, password)) {
+        // Comparison to check username existing
+        if (compareUsers(username)) {
             return false;
         }
+
+        // MySQL query setup
         String query = "INSERT INTO user(`Username`, `Password`, `UserType`) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
@@ -42,26 +64,33 @@ public class SQLConnector {
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
         }
+
+        // Print error if failed
         catch (Exception e) {
-            System.out.println(e);
+            System.out.println("( MySQL Data Insert Failed )");
+            // DEBUG USE // System.out.println(e);
             return false;
         }
     }
 
-    public boolean compareUsers(String username, String password) {
-        String query = "SELECT * FROM user";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                if (rs.getString("Username").equals(username) && rs.getString("Password").equals(password)) {
-                    userType = rs.getString("UserType");
-                    return true;
-                }
+    // User comparison from database method
+    public boolean compareUsers(String username) {
+        // MySQL query find related username
+        String query = "SELECT * FROM user WHERE `Username` = ?";
+
+        // Try to prepare the statement and execute
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
             }
-            return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
+
+        // Print error if failed
+        catch (SQLException e) {
+            System.out.println("( MySQL Compare User Failed )");
+            // DEBUG USE // System.out.println(e);
+        }
+        return false;
     }
 }
