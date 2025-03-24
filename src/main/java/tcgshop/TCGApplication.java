@@ -1,11 +1,9 @@
 package tcgshop;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,40 +20,39 @@ public class TCGApplication extends Application {
         SQLConnector sql = new SQLConnector();
 
         // Shop Page Initialize
-        Label usernameLabel = new Label("Username: ");
-        Label passwordLabel = new Label("Password: ");
-        Label adminLabel = new Label("Admin: ");
+        Label usernameLabel = new Label("Username: " + username);
+        Label passwordLabel = new Label("Password: " + password);
+        Label adminLabel = new Label("Admin: " + (isAdmin ? "Admin" : "User"));
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> {
-            primaryStage.setScene(loginPage);
-        });
+        backButton.setOnAction(_ -> primaryStage.setScene(loginPage));
         VBox vBox = new VBox(usernameLabel, passwordLabel, adminLabel, backButton);
         Scene testScene = new Scene(vBox, 300, 300);
 
         // Login Page Initialize
         loginPage = new LoginPage();
 
-        // Sign in button action setup
-        loginPage.getSignInPane().getSignUpButton().setOnAction(event -> {
-            String[] data = loginPage.getSignInPane().getInput();
-
-            // Avoid empty data input
+        // Sign out button action setup
+        loginPage.getSignUpPane().getSignUpButton().setOnAction(_ -> {
+            String[] data = loginPage.getSignUpPane().getInput();
             if (data[0].isEmpty() || data[1].isEmpty() || data[2] == null) {
-                loginPage.getSignInPane().getErrorRespond().setText("Please fill all information!");
+                loginPage.getSignUpPane().getErrorRespond().setText("Please fill all information!");
             }
             else {
                 if (sql.addUser(data[0], data[1], data[2])) {
-                    loginPage.getSignInPane().reset();
+                    loginPage.getSignUpPane().reset();
                     this.username = data[0];
                     this.password = data[1];
                     this.isAdmin = data[2].equals("admin");
                     primaryStage.setScene(testScene);
-                } else {
-                    loginPage.getSignInPane().getErrorRespond().setText("Username exists");
+                }
+                else {
+                    loginPage.getSignUpPane().getErrorRespond().setText("Username exists");
                 }
             }
         });
-        loginPage.getLogInPane().getLogInButton().setOnAction(event -> {
+
+        // Log in button action setup
+        loginPage.getLogInPane().getLogInButton().setOnAction(_ -> {
             String[] data = loginPage.getLogInPane().getInput();
             if (data[0].isEmpty() || data[1].isEmpty()) {
                 loginPage.getLogInPane().getErrorRespond().setText("Please fill all information!");
@@ -68,15 +65,15 @@ public class TCGApplication extends Application {
                     this.password = data[1];
                     this.isAdmin = userType.equals("admin");
                     primaryStage.setScene(testScene);
-                } else {
+                }
+                else {
                     loginPage.getLogInPane().getErrorRespond().setText("Wrong username or password!");
                 }
             }
         });
+
+        // Stage config
         primaryStage.setScene(loginPage);
-
-
-
         primaryStage.setTitle("TCG Shop");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(800);

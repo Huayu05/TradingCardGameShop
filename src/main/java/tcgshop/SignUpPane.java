@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.util.function.UnaryOperator;
+
 public class SignUpPane extends GridPane {
     // Nodes needed interact from outside class
     private Button signUpButton;
@@ -17,6 +19,15 @@ public class SignUpPane extends GridPane {
     public SignUpPane() {
         // Call constructor from parent class
         super();
+
+        // Text or password field limiter
+        int maxLength = 20;
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            if (change.getControlNewText().length() > maxLength) {
+                return null; // Reject the change
+            }
+            return change;
+        };
 
         // Topic label
         Label title = new Label("Create an Account");
@@ -43,12 +54,14 @@ public class SignUpPane extends GridPane {
         username = new TextField();
         username.setPromptText("Username");
         username.setMaxWidth(200);
+        username.setTextFormatter(new TextFormatter<>(filter));
         VBox.setMargin(username, new Insets(0, 0, 10, 0));
 
         // Password input password field
         password = new PasswordField();
         password.setPromptText("Password");
         password.setMaxWidth(200);
+        password.setTextFormatter(new TextFormatter<>(filter));
         VBox.setMargin(password, new Insets(0, 0, 10, 0));
 
         // User type combo box

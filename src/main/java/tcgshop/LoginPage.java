@@ -64,6 +64,7 @@ class LoginPage extends Scene {
             nowSignUp = !nowSignUp;
             movingPane.changeSide(loginMain.getWidth(), loginMain.getPadding().getLeft(), nowSignUp);
             signUpPane.reset();
+            logInPane.reset();
             if (nowSignUp) {
                 GeneralFunction.disappearPane(logInPane);
                 GeneralFunction.displayPane(signUpPane);
@@ -81,7 +82,7 @@ class LoginPage extends Scene {
     }
 
     // Getter Method ( Sign In Pane )
-    public SignUpPane getSignInPane() {
+    public SignUpPane getSignUpPane() {
         return signUpPane;
     }
 }
