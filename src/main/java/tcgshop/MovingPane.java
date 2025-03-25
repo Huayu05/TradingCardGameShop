@@ -13,12 +13,15 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class MovingPane extends VBox {
-    // Class Attribute
+    // Class variable
+    private boolean nowLeft = true;
+
+    // Dynamic nodes
     private Label title;
     private Label subtitle;
     private Button changeSide;
 
-    public MovingPane() {
+    public MovingPane(LoginScene scene) {
         // Big title change depends on which side
         title = new Label("Welcome Back");
         VBox.setMargin(title, new Insets(0, 0, 15, 0));
@@ -43,6 +46,7 @@ public class MovingPane extends VBox {
         // A switch side button
         changeSide = new Button("Login");
         changeSide.setMinWidth(100);
+        changeSide.setOnAction(_ -> changeSide(scene));
         changeSide.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 16;" +
@@ -68,10 +72,15 @@ public class MovingPane extends VBox {
 
 
     // Method switch side of the VBox
-    public void changeSide(double stackPaneWidth, double stackPanePadding, boolean nowLeft) {
+    public void changeSide(LoginScene scene) {
+        // Reset position now and both page input
+        nowLeft = !nowLeft;
+        scene.getLogInPane().reset();
+        scene.getSignUpPane().reset();
+
         // VBox moving animation
         TranslateTransition transition = new TranslateTransition(Duration.millis(1000), this);
-        double distance = stackPaneWidth - this.getWidth() - stackPanePadding * 2;
+        double distance = scene.getLoginMain().getWidth() - this.getWidth() - scene.getLoginMain().getPadding().getLeft() * 2;
         changeSide.setDisable(true);
         transition.setByX(nowLeft ? -distance : distance);
         transition.setOnFinished(_ -> {
@@ -80,6 +89,16 @@ public class MovingPane extends VBox {
             changeSide.setDisable(false);
         });
         transition.play();
+
+        // Show only related pane
+        if (nowLeft) {
+            GeneralFunction.disappearPane(scene.getLogInPane());
+            GeneralFunction.displayPane(scene.getSignUpPane());
+        }
+        else {
+            GeneralFunction.disappearPane(scene.getSignUpPane());
+            GeneralFunction.displayPane(scene.getLogInPane());
+        }
 
         // Parallel start all transition
         ParallelTransition parallelTransition = new ParallelTransition(
@@ -104,11 +123,5 @@ public class MovingPane extends VBox {
             fadeIn.play();
         });
         return fadeOut;
-    }
-
-
-    // Getter method ( changeSide Button )
-    public Button getChangeSide() {
-        return changeSide;
     }
 }

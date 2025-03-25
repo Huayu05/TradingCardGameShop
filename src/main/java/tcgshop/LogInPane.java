@@ -2,20 +2,28 @@ package tcgshop;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
 
 import java.util.function.UnaryOperator;
 
 public class LogInPane extends GridPane {
-    // Nodes needed interact from outside class
-    private Button logInButton;
+    // Dynamic nodes
     private Label errorRespond;
     private TextField username;
     private PasswordField password;
 
     // Constructor
-    public LogInPane() {
+    public LogInPane(TCGApplication tcgApplication) {
         // Call constructor from parent class
         super();
 
@@ -64,11 +72,12 @@ public class LogInPane extends GridPane {
         VBox.setMargin(password, new Insets(0, 0, 25, 0));
 
         // Submit button for login
-        logInButton = new Button("Log In");
+        Button logInButton = new Button("Log In");
         logInButton.setMinWidth(100);
+        logInButton.setOnAction(_ -> logIn(tcgApplication));
         logInButton.setStyle(
-            "-fx-font-size: 12px;" +
-            "-fx-background-radius: 5px;"
+                "-fx-font-size: 12px;" +
+                "-fx-background-radius: 5px;"
         );
         VBox.setMargin(logInButton, new Insets(0, 0, 5, 0));
 
@@ -94,38 +103,44 @@ public class LogInPane extends GridPane {
         Pane blank = new Pane();
         this.add(blank, 1, 0);
 
-        // GridPane config
+        // Column constraints config
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(50);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(50);
         col1.setHgrow(Priority.ALWAYS);
         col2.setHgrow(Priority.ALWAYS);
+
+        // Log in pane config
         this.getColumnConstraints().addAll(col1, col2);
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
         this.setMaxHeight(300);
     }
 
-    // Retrieve user input
-    public String[] getInput() {
-        return new String[] {username.getText(), password.getText()};
+
+    // Login method
+    public void logIn(TCGApplication tcgApplication) {
+        String[] data = new String[]{username.getText(), password.getText()};
+        if (data[0].isEmpty() || data[1].isEmpty()) {
+            errorRespond.setText("Please fill all information!");
+        } else {
+            String userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
+            if (!userType.equals("false")) {
+                reset();
+                tcgApplication.getShopScene().setUserInformation(data[0], data[1], userType.equals("admin"));
+                tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
+            } else {
+                errorRespond.setText("Wrong username or password!");
+            }
+        }
     }
 
-    // Reset all input
+
+    // Reset all input field
     public void reset() {
         username.setText("");
         password.setText("");
         errorRespond.setText("");
-    }
-
-    // Getter Method ( Log In Button )
-    public Button getLogInButton() {
-        return logInButton;
-    }
-
-    // Getter Method ( Error Respond Label )
-    public Label getErrorRespond() {
-        return errorRespond;
     }
 }

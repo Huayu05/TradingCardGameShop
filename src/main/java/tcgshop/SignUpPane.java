@@ -2,21 +2,30 @@ package tcgshop;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.Priority;
 
 import java.util.function.UnaryOperator;
 
 public class SignUpPane extends GridPane {
-    // Nodes needed interact from outside class
-    private Button signUpButton;
-    private Label errorRespond;
+    // Dynamic nodes
     private TextField username;
     private PasswordField password;
     private ComboBox<String> role;
+    private Label errorRespond;
 
     // Constructor
-    public SignUpPane() {
+    public SignUpPane(TCGApplication tcgApplication) {
         // Call constructor from parent class
         super();
 
@@ -30,7 +39,7 @@ public class SignUpPane extends GridPane {
         };
 
         // Topic label
-        Label title = new Label("Create an Account");
+        Label title = new Label("Create Account");
         title.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 34;" +
@@ -72,12 +81,13 @@ public class SignUpPane extends GridPane {
         VBox.setMargin(role, new Insets(0, 0, 25, 0));
 
         // Submit button for sign up
-        signUpButton = new Button("Sign Up");
+        Button signUpButton = new Button("Sign Up");
         signUpButton.setMinWidth(100);
         signUpButton.setStyle(
-            "-fx-font-size: 12px;" + 
-            "-fx-background-radius: 5px;"
+                "-fx-font-size: 12px;" +
+                "-fx-background-radius: 5px;"
         );
+        signUpButton.setOnAction(_ -> signUp(tcgApplication));
         VBox.setMargin(signUpButton, new Insets(0, 0, 5, 0));
 
 
@@ -93,7 +103,6 @@ public class SignUpPane extends GridPane {
         signUpVBox.getChildren().addAll(title, subtitle, username, password, role, signUpButton, errorRespond);
         signUpVBox.setAlignment(Pos.CENTER);
 
-
         // signInStackPane Config
         StackPane signInStackPane = new StackPane();
         signInStackPane.getChildren().add(signUpVBox);
@@ -104,26 +113,42 @@ public class SignUpPane extends GridPane {
         Pane blank = new Pane();
         this.add(blank, 0, 0);
 
-        // GridPane config
+        // Column constraint assign
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(50);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(50);
         col1.setHgrow(Priority.ALWAYS);
         col2.setHgrow(Priority.ALWAYS);
-        this.getColumnConstraints().addAll(col1, col2);
 
+        // Sign up pane config
+        this.getColumnConstraints().addAll(col1, col2);
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
         this.setMaxHeight(300);
     }
 
-    // Retrieve user input
-    public String[] getInput() {
-        return new String[] {username.getText(), password.getText(), role.getValue()};
+
+    // Sign up method
+    public void signUp(TCGApplication tcgApplication) {
+        String[] data = new String[] {username.getText(), password.getText(), role.getValue()};
+        if (data[0].isEmpty() || data[1].isEmpty() || data[2] == null) {
+            errorRespond.setText("Please fill all information!");
+        }
+        else {
+            if (tcgApplication.getSQLConnector().addUser(data[0], data[1], data[2])) {
+                reset();
+                tcgApplication.getShopScene().setUserInformation(data[0],data[1],data[2].equals("admin"));
+                tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
+            }
+            else {
+                errorRespond.setText("Username exists");
+            }
+        }
     }
 
-    // Reset all input
+
+    // Reset all input nodes
     public void reset() {
         username.setText("");
         password.setText("");
@@ -131,14 +156,5 @@ public class SignUpPane extends GridPane {
         role.setValue(null);
         role.setPromptText(" - Choose Your Role - ");
         errorRespond.setText("");
-    }
-
-    // Getter Method ( Sign Up Button )
-    public Button getSignUpButton() {
-        return signUpButton;
-    }
-    // Getter Method ( Error Respond )
-    public Label getErrorRespond() {
-        return errorRespond;
     }
 }
