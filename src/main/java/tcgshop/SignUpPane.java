@@ -21,7 +21,6 @@ public class SignUpPane extends GridPane {
     // Dynamic nodes
     private TextField username;
     private PasswordField password;
-    private ComboBox<String> role;
     private Label errorRespond;
 
     // Constructor
@@ -73,13 +72,6 @@ public class SignUpPane extends GridPane {
         password.setTextFormatter(new TextFormatter<>(filter));
         VBox.setMargin(password, new Insets(0, 0, 10, 0));
 
-        // User type combo box
-        role = new ComboBox<>();
-        role.setPromptText(" - Choose Your Role - ");
-        role.getItems().addAll("User", "Admin");
-        role.setMaxWidth(200);
-        VBox.setMargin(role, new Insets(0, 0, 25, 0));
-
         // Submit button for sign up
         Button signUpButton = new Button("Sign Up");
         signUpButton.setMinWidth(100);
@@ -100,7 +92,7 @@ public class SignUpPane extends GridPane {
 
         // signUpVBox Config
         VBox signUpVBox = new VBox();
-        signUpVBox.getChildren().addAll(title, subtitle, username, password, role, signUpButton, errorRespond);
+        signUpVBox.getChildren().addAll(title, subtitle, username, password, signUpButton, errorRespond);
         signUpVBox.setAlignment(Pos.CENTER);
 
         // signInStackPane Config
@@ -131,12 +123,12 @@ public class SignUpPane extends GridPane {
 
     // Sign up method
     public void signUp(TCGApplication tcgApplication) {
-        String[] data = new String[] {username.getText(), password.getText(), role.getValue()};
-        if (data[0].isEmpty() || data[1].isEmpty() || data[2] == null) {
+        String[] data = new String[] {username.getText(), password.getText()};
+        if (data[0].isEmpty() || data[1].isEmpty()) {
             errorRespond.setText("Please fill all information!");
         }
         else {
-            if (tcgApplication.getSQLConnector().addUser(data[0], data[1], data[2])) {
+            if (tcgApplication.getSQLConnector().addUser(data[0], data[1])) {
                 reset();
                 tcgApplication.getShopScene().setUserInformation(data[0],data[1],data[2].equals("admin"));
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
@@ -152,9 +144,6 @@ public class SignUpPane extends GridPane {
     public void reset() {
         username.setText("");
         password.setText("");
-        role.getSelectionModel().clearSelection();
-        role.setValue(null);
-        role.setPromptText(" - Choose Your Role - ");
         errorRespond.setText("");
     }
 }

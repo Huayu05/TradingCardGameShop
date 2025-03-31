@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
 import java.util.Objects;
 
 public class LoginScene extends Scene {
@@ -61,15 +61,18 @@ public class LoginScene extends Scene {
 
     }
 
+
     // Getter method ( Login Main Pane )
     public StackPane getLoginMain() {
         return loginMain;
     }
 
+
     // Getter method ( Log In Pane )
     public LogInPane getLogInPane() {
         return logInPane;
     }
+
 
     // Getter method ( Sign In Pane )
     public SignUpPane getSignUpPane() {

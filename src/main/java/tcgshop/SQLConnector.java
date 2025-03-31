@@ -49,7 +49,7 @@ public class SQLConnector {
     }
 
     // Sign up method
-    public boolean addUser(String username, String password, String type) {
+    public boolean addUser(String username, String password) {
         // Comparison to check username existing
         if (compareUsers(username)) {
             return false;
@@ -60,7 +60,7 @@ public class SQLConnector {
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
             stmt.setString(2, password);
-            stmt.setString(3, type);
+            stmt.setString(3, "user");
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
         }
