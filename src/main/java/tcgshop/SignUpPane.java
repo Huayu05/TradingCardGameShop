@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
@@ -130,7 +129,7 @@ public class SignUpPane extends GridPane {
         else {
             if (tcgApplication.getSQLConnector().addUser(data[0], data[1])) {
                 reset();
-                tcgApplication.getShopScene().setUserInformation(data[0],data[1],data[2].equals("admin"));
+                tcgApplication.getShopScene().setUserInformation(data[0],data[1],false);
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
             }
             else {
