@@ -8,4 +8,10 @@ module com.tcgshop.tradingcardgameshop {
 
     opens tcgshop to javafx.fxml;
     exports tcgshop;
+    exports tcgshop.authentication;
+    opens tcgshop.authentication to javafx.fxml;
+    exports tcgshop.utils;
+    opens tcgshop.utils to javafx.fxml;
+    exports tcgshop.main;
+    opens tcgshop.main to javafx.fxml;
 }

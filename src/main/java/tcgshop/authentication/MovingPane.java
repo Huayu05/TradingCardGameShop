@@ -1,4 +1,4 @@
-package tcgshop;
+package tcgshop.authentication;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -11,6 +11,7 @@ import javafx.scene.control.Labeled;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import tcgshop.utils.GeneralFunction;
 
 public class MovingPane extends VBox {
     // Class variable

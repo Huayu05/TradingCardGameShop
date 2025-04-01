@@ -1,4 +1,4 @@
-package tcgshop;
+package tcgshop.authentication;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,17 +13,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
+import tcgshop.TCGApplication;
 
 import java.util.function.UnaryOperator;
 
-public class SignUpPane extends GridPane {
+public class LogInPane extends GridPane {
     // Dynamic nodes
+    private Label errorRespond;
     private TextField username;
     private PasswordField password;
-    private Label errorRespond;
 
     // Constructor
-    public SignUpPane(TCGApplication tcgApplication) {
+    public LogInPane(TCGApplication tcgApplication) {
         // Call constructor from parent class
         super();
 
@@ -37,7 +38,7 @@ public class SignUpPane extends GridPane {
         };
 
         // Topic label
-        Label title = new Label("Create Account");
+        Label title = new Label("Log In Account");
         title.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 34;" +
@@ -48,13 +49,13 @@ public class SignUpPane extends GridPane {
         VBox.setMargin(title, new Insets(0, 0, 10, 0));
 
         // Subtitle label
-        Label subtitle = new Label("Let's begin to start your journey at here!");
+        Label subtitle = new Label("Welcome back and continue your journey here!");
         subtitle.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 12;" +
                 "-fx-text-fill: #4A3B2F;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
-        );        
+        );
         VBox.setMargin(subtitle, new Insets(0, 0, 25, 0));
 
         // Username input text field
@@ -69,18 +70,17 @@ public class SignUpPane extends GridPane {
         password.setPromptText("Password");
         password.setMaxWidth(200);
         password.setTextFormatter(new TextFormatter<>(filter));
-        VBox.setMargin(password, new Insets(0, 0, 10, 0));
+        VBox.setMargin(password, new Insets(0, 0, 25, 0));
 
-        // Submit button for sign up
-        Button signUpButton = new Button("Sign Up");
-        signUpButton.setMinWidth(100);
-        signUpButton.setStyle(
+        // Submit button for login
+        Button logInButton = new Button("Log In");
+        logInButton.setMinWidth(100);
+        logInButton.setOnAction(_ -> logIn(tcgApplication));
+        logInButton.setStyle(
                 "-fx-font-size: 12px;" +
                 "-fx-background-radius: 5px;"
         );
-        signUpButton.setOnAction(_ -> signUp(tcgApplication));
-        VBox.setMargin(signUpButton, new Insets(0, 0, 5, 0));
-
+        VBox.setMargin(logInButton, new Insets(0, 0, 5, 0));
 
         // Respond label for button click
         errorRespond = new Label();
@@ -89,22 +89,22 @@ public class SignUpPane extends GridPane {
                 "-fx-text-fill: #FF0000;"
         );
 
-        // signUpVBox Config
-        VBox signUpVBox = new VBox();
-        signUpVBox.getChildren().addAll(title, subtitle, username, password, signUpButton, errorRespond);
-        signUpVBox.setAlignment(Pos.CENTER);
+        // logInVBox Config
+        VBox logInVBox = new VBox();
+        logInVBox.getChildren().addAll(title, subtitle, username, password, logInButton, errorRespond);
+        logInVBox.setAlignment(Pos.CENTER);
 
-        // signInStackPane Config
-        StackPane signInStackPane = new StackPane();
-        signInStackPane.getChildren().add(signUpVBox);
-        signInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
-        this.add(signInStackPane, 1, 0);
+        // logInStackPane Config
+        StackPane logInStackPane = new StackPane();
+        logInStackPane.getChildren().add(logInVBox);
+        logInStackPane.prefHeightProperty().bind(this.prefHeightProperty());
+        this.add(logInStackPane, 0, 0);
 
-        // Blank pane for align right
+        // Blank pane for align left
         Pane blank = new Pane();
-        this.add(blank, 0, 0);
+        this.add(blank, 1, 0);
 
-        // Column constraint assign
+        // Column constraints config
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(50);
         ColumnConstraints col2 = new ColumnConstraints();
@@ -112,7 +112,7 @@ public class SignUpPane extends GridPane {
         col1.setHgrow(Priority.ALWAYS);
         col2.setHgrow(Priority.ALWAYS);
 
-        // Sign up pane config
+        // Log in pane config
         this.getColumnConstraints().addAll(col1, col2);
         this.setPadding(new Insets(20));
         this.setMinHeight(300);
@@ -120,26 +120,25 @@ public class SignUpPane extends GridPane {
     }
 
 
-    // Sign up method
-    public void signUp(TCGApplication tcgApplication) {
-        String[] data = new String[] {username.getText(), password.getText()};
+    // Login method
+    public void logIn(TCGApplication tcgApplication) {
+        String[] data = new String[]{username.getText(), password.getText()};
         if (data[0].isEmpty() || data[1].isEmpty()) {
             errorRespond.setText("Please fill all information!");
-        }
-        else {
-            if (tcgApplication.getSQLConnector().addUser(data[0], data[1])) {
+        } else {
+            String userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
+            if (!userType.equals("false")) {
                 reset();
-                tcgApplication.getShopScene().setUserInformation(data[0],data[1],false);
+                tcgApplication.getShopScene().setUserInformation(data[0], data[1], userType.equals("admin"));
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
-            }
-            else {
-                errorRespond.setText("Username exists");
+            } else {
+                errorRespond.setText("Wrong username or password!");
             }
         }
     }
 
 
-    // Reset all input nodes
+    // Reset all input field
     public void reset() {
         username.setText("");
         password.setText("");

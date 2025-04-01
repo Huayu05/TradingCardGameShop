@@ -3,11 +3,14 @@ package tcgshop;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import tcgshop.authentication.LoginScene;
+import tcgshop.main.MainScene;
+import tcgshop.utils.SQLConnector;
 
 public class TCGApplication extends Application {
     // Parents in the class
     private LoginScene loginScene;
-    private ShopScene shopScene;
+    private MainScene mainScene;
     private SQLConnector sqlConnector;
     private Stage primaryStage;
 
@@ -20,14 +23,14 @@ public class TCGApplication extends Application {
         sqlConnector = new SQLConnector();
 
         // Shop Page Initialize
-        shopScene = new ShopScene(this);
+        mainScene = new MainScene(this);
 
         // Login Page Initialize
         loginScene = new LoginScene(this);
 
         // Stage config
-        primaryStage.setScene(loginScene);
-        primaryStage.setTitle("TCG Shop");
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Trading Card Game Shop");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(800);
         primaryStage.show();
@@ -44,8 +47,8 @@ public class TCGApplication extends Application {
     }
 
     // Getter method ( Shop Scene )
-    public ShopScene getShopScene() {
-        return shopScene;
+    public MainScene getShopScene() {
+        return mainScene;
     }
 
     // Getter method ( SQL Connector )

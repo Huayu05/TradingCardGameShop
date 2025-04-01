@@ -1,4 +1,4 @@
-package tcgshop;
+package tcgshop.authentication;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import tcgshop.TCGApplication;
+
 import java.util.Objects;
 
 public class LoginScene extends Scene {

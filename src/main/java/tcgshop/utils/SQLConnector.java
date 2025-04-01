@@ -1,4 +1,4 @@
-package tcgshop;
+package tcgshop.utils;
 
 import java.sql.*;
 
