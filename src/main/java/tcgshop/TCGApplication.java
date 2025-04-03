@@ -64,25 +64,9 @@ public class TCGApplication extends Application {
     }
 
 
-    // Getter method ( Username )
-    public String getUsername() {
-        return username;
-    }
-
-
-    // Getter method ( Password )
-    public String getPassword() {
-        return password;
-    }
-
     // Getter method ( IsAdmin )
     public boolean isAdmin() {
         return isAdmin;
-    }
-
-    // Getter method ( Login Scene )
-    public LoginScene getLoginScene() {
-        return loginScene;
     }
 
 

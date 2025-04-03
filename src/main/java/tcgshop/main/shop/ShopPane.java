@@ -22,6 +22,7 @@ public class ShopPane extends GridPane {
         col1.setHgrow(Priority.ALWAYS);
         col2.setHgrow(Priority.ALWAYS);
 
+        // Grid pane config
         this.getColumnConstraints().addAll(col1, col2);
 
     }

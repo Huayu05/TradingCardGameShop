@@ -39,6 +39,8 @@ public class CategoryBar extends VBox {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
+
+                // Set color for all cells
                 if (empty || item == null) {
                     setText(null);
                     setStyle("-fx-background-color: #393E46;");
@@ -76,5 +78,4 @@ public class CategoryBar extends VBox {
         );
         this.getChildren().add(listView);
     }
-
 }
