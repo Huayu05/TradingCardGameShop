@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import tcgshop.TCGApplication;
+import tcgshop.main.shop.ShopPane;
 
 public class MainScene extends Scene {
     // User information
@@ -27,10 +28,11 @@ public class MainScene extends Scene {
         // Root initializing
         BorderPane root = (BorderPane) getRoot();
 
-        // HBox of the top row
+        // HBox of the top row menu
         TopMenu topMenu = new TopMenu(this);
 
-        // Nodes in the top menu
+        // Shop page
+        ShopPane shopPane = new ShopPane();
 
 
         // Temp
@@ -41,10 +43,11 @@ public class MainScene extends Scene {
         backButton.setOnAction(_ -> tcgApplication.setPrimaryStage(tcgApplication.getLoginScene()));
         VBox vBox = new VBox();
         vBox.getChildren().addAll(usernameLabel, passwordLabel, adminLabel, backButton);
+
+        // Root scene config
         root.setTop(topMenu);
-        root.setCenter(vBox);
-
-
+        root.setCenter(shopPane);
+        root.setStyle("-fx-background-color: #EEEEEE");
     }
 
     // Getter method ( is admin ? )

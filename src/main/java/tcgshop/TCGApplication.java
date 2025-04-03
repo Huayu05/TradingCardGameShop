@@ -36,29 +36,33 @@ public class TCGApplication extends Application {
         primaryStage.show();
     }
 
+
     // Main Method
     public static void main(String[] args) {
         launch(args);
     }
+
 
     // Getter method ( Login Scene )
     public LoginScene getLoginScene() {
         return loginScene;
     }
 
+
     // Getter method ( Shop Scene )
     public MainScene getShopScene() {
         return mainScene;
     }
+
 
     // Getter method ( SQL Connector )
     public SQLConnector getSQLConnector() {
         return sqlConnector;
     }
 
+
     // Setter method ( Primary Stage )
     public void setPrimaryStage(Scene scene) {
         primaryStage.setScene(scene);
     }
-
 }

@@ -77,11 +77,17 @@ public class TopMenu extends HBox {
         this.setMinHeight(80);
         this.setMaxHeight(120);
         this.getChildren().addAll(shopNameBox, spacer, usernameBox, dropboxButton);
-        this.setStyle("-fx-background-color: #222831;");
+        this.setStyle(
+                "-fx-background-color: #222831;" +
+                "-fx-background-radius: 0 0 20px 20px;" +
+                "-fx-effect: dropshadow(gaussian, #0000006F, 30, 0.5, 0, 0);"
+        );
         this.prefHeightProperty().bind(mainScene.heightProperty().multiply(0.2));
 
     }
 
+
+    // Method for dropdown button building
     private Button createDropdownButton(boolean isAdmin) {
         Button dropboxButton = new Button("≡");
 
@@ -123,6 +129,8 @@ public class TopMenu extends HBox {
         return dropboxButton;
     }
 
+
+    // Setter method ( Username Label )
     public void setUsernameLabel(String username) {
         this.usernameLabelTwo.setText(username + " ");
     }
