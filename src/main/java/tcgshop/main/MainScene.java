@@ -3,21 +3,19 @@ package tcgshop.main;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import tcgshop.TCGApplication;
 
-import java.util.Objects;
-
 public class MainScene extends Scene {
     // User information
-    private String username;
-    private String password;
-    private boolean isAdmin;
+    private String username = "huayu";
+    private String password = "123456";
+    private boolean isAdmin = true;
+
+    // Dynamic nodes
+    private TopMenu topMenu;
     private Label usernameLabel;
     private Label passwordLabel;
     private Label adminLabel;
@@ -30,10 +28,7 @@ public class MainScene extends Scene {
         BorderPane root = (BorderPane) getRoot();
 
         // HBox of the top row
-        HBox topMenu = new HBox();
-        topMenu.setMinHeight(80);
-        topMenu.setMaxHeight(80);
-        topMenu.setStyle("-fx-background-color: #222831;");
+        TopMenu topMenu = new TopMenu(this);
 
         // Nodes in the top menu
 
@@ -52,11 +47,17 @@ public class MainScene extends Scene {
 
     }
 
-    // Get account details method
+    // Getter method ( is admin ? )
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    // Setter method ( account details )
     public void setUserInformation(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.topMenu.setUsernameLabel(username);
 
         // Temp code
         usernameLabel.setText(username);
