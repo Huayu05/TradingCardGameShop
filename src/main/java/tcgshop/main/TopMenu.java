@@ -11,14 +11,19 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import tcgshop.TCGApplication;
 
 public class TopMenu extends HBox {
     // Dynamic nodes
+    private TCGApplication tcgApplication;
     private Label usernameLabelTwo;
 
-    public TopMenu(MainScene mainScene) {
+    public TopMenu(TCGApplication tcgApplication, MainScene mainScene) {
         // Call constructor from parent
         super();
+
+        // Initialize dynamic nodes
+        this.tcgApplication = tcgApplication;
 
         // Shop name vbox
         Label shopNameOne = new Label("HY Trading Card Game");
@@ -59,7 +64,7 @@ public class TopMenu extends HBox {
         );
 
         // Account options dropdown button
-        Button dropboxButton = createDropdownButton(mainScene.getIsAdmin());
+        Button dropboxButton = createDropdownButton(tcgApplication.isAdmin());
         dropboxButton.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 20;" +
@@ -110,6 +115,11 @@ public class TopMenu extends HBox {
             option3.setOnAction(_ -> System.out.println("Option 3 clicked"));
             contextMenu.getItems().add(option3);
         }
+
+        // Logout option
+        MenuItem lastOption = new MenuItem("Logout");
+        lastOption.setOnAction(_ -> tcgApplication.logout());
+        contextMenu.getItems().add(lastOption);
 
         // Show the ContextMenu when the button is clicked
         dropboxButton.setOnAction(_ -> {

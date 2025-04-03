@@ -25,7 +25,7 @@ public class SQLConnector {
     }
 
     // Login method by return userType for validation or "false" if failed
-    public String login(String username, String password) {
+    public int login(String username, String password) {
         // MySQL query find related username and password
         String query = "SELECT * FROM user WHERE `Username` = ? AND `Password` = ?";
 
@@ -35,16 +35,16 @@ public class SQLConnector {
             stmt.setString(2, password);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("UserType");
+                    return rs.getInt("IsAdmin");
                 }
             }
-            return "false";
+            return -1;
         }
 
         // Print error if failed
         catch (SQLException e) {
             System.out.println("( MySQL Login Failed )");
-            return "false";
+            return -1;
         }
     }
 
@@ -56,11 +56,11 @@ public class SQLConnector {
         }
 
         // MySQL query setup
-        String query = "INSERT INTO user(`Username`, `Password`, `UserType`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO user(`Username`, `Password`, `IsAdmin`) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
             stmt.setString(2, password);
-            stmt.setString(3, "user");
+            stmt.setInt(3, 0);
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
         }

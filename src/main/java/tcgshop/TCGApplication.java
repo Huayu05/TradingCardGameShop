@@ -8,6 +8,11 @@ import tcgshop.main.MainScene;
 import tcgshop.utils.SQLConnector;
 
 public class TCGApplication extends Application {
+    // User information
+    private String username = "huayu";
+    private String password = "123456";
+    private boolean isAdmin = true;
+
     // Parents in the class
     private LoginScene loginScene;
     private MainScene mainScene;
@@ -43,6 +48,38 @@ public class TCGApplication extends Application {
     }
 
 
+    // Logout method
+    public void logout() {
+        setPrimaryStage(loginScene);
+        this.username = null;
+        this.password = null;
+        this.isAdmin = false;
+        resetMainScene();
+    }
+
+
+    // Main scene reset method
+    public void resetMainScene() {
+        this.mainScene = new MainScene(this);
+    }
+
+
+    // Getter method ( Username )
+    public String getUsername() {
+        return username;
+    }
+
+
+    // Getter method ( Password )
+    public String getPassword() {
+        return password;
+    }
+
+    // Getter method ( IsAdmin )
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
     // Getter method ( Login Scene )
     public LoginScene getLoginScene() {
         return loginScene;
@@ -64,5 +101,15 @@ public class TCGApplication extends Application {
     // Setter method ( Primary Stage )
     public void setPrimaryStage(Scene scene) {
         primaryStage.setScene(scene);
+    }
+
+
+    // Setter method ( account details )
+    public void setUserInformation(String username, String password, boolean isAdmin) {
+        this.username = username;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        mainScene.getTopMenu().setUsernameLabel(username);
+
     }
 }

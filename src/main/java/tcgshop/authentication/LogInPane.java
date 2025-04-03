@@ -126,10 +126,11 @@ public class LogInPane extends GridPane {
         if (data[0].isEmpty() || data[1].isEmpty()) {
             errorRespond.setText("Please fill all information!");
         } else {
-            String userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
-            if (!userType.equals("false")) {
+            int userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
+            if (userType != -1) {
                 reset();
-                tcgApplication.getShopScene().setUserInformation(data[0], data[1], userType.equals("admin"));
+                tcgApplication.resetMainScene();
+                tcgApplication.setUserInformation(data[0], data[1], userType == 1);
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
             } else {
                 errorRespond.setText("Wrong username or password!");

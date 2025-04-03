@@ -130,7 +130,8 @@ public class SignUpPane extends GridPane {
         else {
             if (tcgApplication.getSQLConnector().addUser(data[0], data[1])) {
                 reset();
-                tcgApplication.getShopScene().setUserInformation(data[0],data[1],false);
+                tcgApplication.resetMainScene();
+                tcgApplication.setUserInformation(data[0],data[1],false);
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
             }
             else {
