@@ -24,8 +24,14 @@ public class SQLConnector {
         }
     }
 
-    // Login method by return userType for validation or "false" if failed
+    // Login method by return userType for validation or -1 if failed
     public int login(String username, String password) {
+        // Check MySQL connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return -1;
+        }
+
         // MySQL query find related username and password
         String query = "SELECT * FROM user WHERE `Username` = ? AND `Password` = ?";
 
@@ -43,13 +49,19 @@ public class SQLConnector {
 
         // Print error if failed
         catch (SQLException e) {
-            System.out.println("( MySQL Login Failed )");
+            System.out.println(" ERROR: User login failed.");
             return -1;
         }
     }
 
     // Sign up method
     public boolean addUser(String username, String password) {
+        // Check MySQL connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return false;
+        }
+
         // Comparison to check username existing
         if (compareUsers(username)) {
             return false;
@@ -67,8 +79,7 @@ public class SQLConnector {
 
         // Print error if failed
         catch (Exception e) {
-            System.out.println("( MySQL Data Insert Failed )");
-            // DEBUG USE // System.out.println(e);
+            System.out.println(" ERROR: Unable to add user");
             return false;
         }
     }
@@ -88,8 +99,7 @@ public class SQLConnector {
 
         // Print error if failed
         catch (SQLException e) {
-            System.out.println("( MySQL Compare User Failed )");
-            // DEBUG USE // System.out.println(e);
+            System.out.println(" ERROR: Comparison failed.");
         }
         return false;
     }
