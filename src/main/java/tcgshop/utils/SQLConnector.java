@@ -1,6 +1,7 @@
 package tcgshop.utils;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLConnector {
     // SQL connect attribute
@@ -102,5 +103,83 @@ public class SQLConnector {
             System.out.println(" ERROR: Comparison failed.");
         }
         return false;
+    }
+
+
+    // Call category from the category list
+    public ArrayList<String> getCategory() {
+        // Initialize return list and query
+        ArrayList<String> category = new ArrayList<>();
+        String query = "SELECT * FROM categories ORDER BY `CategoryName`";
+
+        // Check MySQL connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return category;
+        }
+
+        // Execute MySQL query, get all category
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    category.add(rs.getString("CategoryName"));
+                }
+            }
+        }
+
+        // Catch error
+        catch (SQLException e) {
+            System.out.println(" ERROR: Category query failed.");
+        }
+
+        return category;
+    }
+
+
+    // Call items from the item list ( ItemID, ItemName, ItemPrice, ItemLeft, Description )
+    public ArrayList<ArrayList<Object>> getItems(String category) {
+        // Initialize return list and query
+        ArrayList<ArrayList<Object>> itemsList = new ArrayList<>();
+        String query;
+
+        // Check MySQL connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return itemsList;
+        }
+
+        // If category is All, change query to retrieve all items
+        if (category.equals("All")) {
+            query = "SELECT * FROM items ORDER BY `ItemName`";
+        }
+        else {
+            query = "SELECT * FROM tcgshopdb.items LEFT JOIN categories ON items.CategoryID = categories.CategoryID " +
+                    "WHERE CategoryName = ? ORDER BY `ItemName`;";
+        }
+
+        // Execute queries, add all data into array list
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            if (!category.equals("All")) {
+                stmt.setString(1, category);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ArrayList<Object> item = new ArrayList<>();
+                    item.add(rs.getInt("ItemID"));
+                    item.add(rs.getString("ItemName"));
+                    item.add(rs.getDouble("ItemPrice"));
+                    item.add(rs.getInt("ItemLeft"));
+                    item.add(rs.getString("Description"));
+                    itemsList.add(item);
+                }
+            }
+        }
+
+        // Catch error
+        catch (SQLException e) {
+            System.out.println(" ERROR: Item query failed.");
+        }
+
+        return itemsList;
     }
 }

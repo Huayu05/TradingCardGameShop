@@ -36,8 +36,8 @@ public class TCGApplication extends Application {
         // Stage config
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("Trading Card Game Shop");
-        primaryStage.setMinHeight(500);
-        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1000);
         primaryStage.show();
     }
 

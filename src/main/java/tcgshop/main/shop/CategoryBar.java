@@ -1,9 +1,11 @@
 package tcgshop.main.shop;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -11,9 +13,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import tcgshop.TCGApplication;
 
 public class CategoryBar extends VBox {
-    public CategoryBar() {
+    public CategoryBar(TCGApplication tcgApplication, ShopPane shopPane) {
         // Call constructor from parent
         super();
 
@@ -27,12 +30,15 @@ public class CategoryBar extends VBox {
         this.getChildren().add(title);
 
         // Scrollable list building for category ( Maximum 15 char )
-        ObservableList<String> categoryList = FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8");
+        ObservableList<String> categoryList = FXCollections.observableArrayList("All");
         ListView<String> listView = new ListView<>(categoryList);
         listView.setStyle(
                 "-fx-font-size: 18px;" +
                 "-fx-background-color: #393E46;"
         );
+
+        // Add categories into list
+        categoryList.addAll(tcgApplication.getSQLConnector().getCategory());
 
         // Cell color setting
         listView.setCellFactory(_ -> new ListCell<>() {
@@ -51,17 +57,38 @@ public class CategoryBar extends VBox {
 
                     // Cell method
                     setOnMouseClicked((MouseEvent _) -> {
-                        if (!isEmpty()) {
+                        if (!isSelected()) {
+                            setStyle("-fx-background-color: #393E46; -fx-text-fill: white;");
+                        }
+                        else {
                             setStyle(
                                     "-fx-background-color: #393E46;" +
                                     "-fx-text-fill: #00ADB5;" +
                                     "-fx-font-weight: bold;" +
-                                    "-fx-padding: 0 0 0 20px;");
+                                    "-fx-padding: 0 0 0 20px;"
+                            );
                             String selectedItem = getItem();
-                            System.out.println("Item clicked: " + selectedItem);
+                            shopPane.resetItemBar(selectedItem);
                         }
+                        listView.getSelectionModel().select(getIndex());
                     });
                 }
+            }
+        });
+
+        // Initialize category to All
+        listView.getSelectionModel().select(0);
+        Platform.runLater(() -> {
+            Node node = listView.lookup(".list-cell");
+            if (node instanceof ListCell<?>) {
+                @SuppressWarnings("unchecked")
+                ListCell<String> firstCell = (ListCell<String>) node;
+                firstCell.setStyle(
+                        "-fx-background-color: #393E46;" +
+                                "-fx-text-fill: #00ADB5;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-padding: 0 0 0 20px;"
+                );
             }
         });
 
@@ -69,6 +96,7 @@ public class CategoryBar extends VBox {
         GridPane.setMargin(this, new Insets(30));
         GridPane.setVgrow(this, Priority.ALWAYS);
         GridPane.setHgrow(this, Priority.ALWAYS);
+        this.setMaxWidth(300);
         this.setPadding(new Insets(20));
         this.setSpacing(20);
         this.setAlignment(Pos.CENTER);
