@@ -61,6 +61,7 @@ public class TCGApplication extends Application {
     // Main scene reset method
     public void resetMainScene() {
         this.mainScene = new MainScene(this);
+        mainScene.getTopMenu().setUsernameLabel(username);
     }
 
 
@@ -93,7 +94,5 @@ public class TCGApplication extends Application {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
-        mainScene.getTopMenu().setUsernameLabel(username);
-
     }
 }

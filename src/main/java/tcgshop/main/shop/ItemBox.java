@@ -16,15 +16,22 @@ import java.util.ArrayList;
 
 public class ItemBox extends VBox {
     // Item information
+    private double itemPrice;
     private int itemLeft;
     private int itemChosen = 0;
 
-    public ItemBox(ArrayList<Object> item) {
+    // Dynamic nodes
+    private ShopPane shopPane;
+
+    public ItemBox(ShopPane shopPane, ArrayList<Object> item) {
         // Call constructor from parent
         super();
 
-        // Save item details
+        // Save item details and add to array list in parent
         this.itemLeft = (int) item.get(3);
+        this.itemPrice = (double) item.get(2);
+        this.shopPane = shopPane;
+        shopPane.addItem(this);
 
         // Item picture
         Image image = new Image("file:src/main/resources/tcgshop/images/items/" + item.get(1) + ".png");
@@ -41,11 +48,11 @@ public class ItemBox extends VBox {
         itemLeft.setTextAlignment(TextAlignment.CENTER);
         itemLeft.setMaxWidth(120);
         itemLeft.setMaxHeight(20);
-        itemLeft.setAlignment(Pos.CENTER);
+        itemLeft.setAlignment(Pos.BOTTOM_CENTER);
         itemLeft.setStyle(
                 "-fx-text-fill: white;" +
                 "-fx-background-color: #393E46;" +
-                "-fx-font-size: 14;" +
+                "-fx-font-size: 12;" +
                 "-fx-font-family: Verdana;" +
                 "-fx-background-radius:10;"
         );
@@ -94,9 +101,11 @@ public class ItemBox extends VBox {
     public HBox createCountBox() {
         // Nodes initialize
         Button minusButton = new Button("-");
-        minusButton.setMaxSize(30, 30);
+        minusButton.setMinSize(25, 25);
+        minusButton.setMaxSize(25, 25);
         Button plusButton = new Button("+");
-        plusButton.setMaxSize(30, 30);
+        plusButton.setMinSize(25, 25);
+        plusButton.setMaxSize(25, 25);
         TextField textField = new TextField();
         textField.setMaxSize(30, 30);
         textField.setText("0");  // Default value
@@ -112,13 +121,17 @@ public class ItemBox extends VBox {
                     if (value < 0 || value > itemLeft) {  // Ensure value is within the range 0-100
                         textField.setText(oldValue);  // Revert to the old value if out of range
                     }
-                    if (value == itemLeft) {
-                        plusButton.setDisable(true);
-                        minusButton.setDisable(false);
-                    }
-                    if (value == 0) {
-                        plusButton.setDisable(false);
-                        minusButton.setDisable(true);
+                    else {
+                        itemChosen = value;
+                        shopPane.refreshCart();
+                        if (value == itemLeft) {
+                            plusButton.setDisable(true);
+                            minusButton.setDisable(false);
+                        }
+                        if (value == 0) {
+                            plusButton.setDisable(false);
+                            minusButton.setDisable(true);
+                        }
                     }
                 }
                 catch (NumberFormatException e) {
@@ -131,10 +144,13 @@ public class ItemBox extends VBox {
         minusButton.setOnAction(e -> {
             itemChosen = Integer.parseInt(textField.getText());
             if (itemChosen > 0) {
-                textField.setText(String.valueOf(itemChosen - 1));
+                itemChosen --;
+                shopPane.refreshCart();
+                textField.setText(String.valueOf(itemChosen));
                 plusButton.setDisable(false);
             }
-            if (itemChosen == 1) {
+            if (itemChosen == 0) {
+                minusButton.getScene().getRoot().requestFocus();
                 minusButton.setDisable(true);
             }
         });
@@ -143,10 +159,13 @@ public class ItemBox extends VBox {
         plusButton.setOnAction(e -> {
             itemChosen = Integer.parseInt(textField.getText());
             if (itemChosen < itemLeft) {
-                textField.setText(String.valueOf(itemChosen + 1));
+                itemChosen ++;
+                shopPane.refreshCart();
+                textField.setText(String.valueOf(itemChosen));
                 minusButton.setDisable(false);
             }
-            if (itemChosen == itemLeft - 1) {
+            if (itemChosen == itemLeft) {
+                plusButton.getScene().getRoot().requestFocus();
                 plusButton.setDisable(true);
             }
         });
@@ -155,5 +174,16 @@ public class ItemBox extends VBox {
         hBox.setAlignment(Pos.CENTER);
 
         return hBox;
+    }
+
+
+    // Getter method ( Quantity )
+    public int getItemChosen() {
+        return itemChosen;
+    }
+
+    // Getter method ( Price )
+    public double getItemPrice() {
+        return itemPrice;
     }
 }

@@ -128,9 +128,9 @@ public class LogInPane extends GridPane {
         } else {
             int userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
             if (userType != -1) {
+                tcgApplication.setUserInformation(data[0], data[1], userType == 1);
                 reset();
                 tcgApplication.resetMainScene();
-                tcgApplication.setUserInformation(data[0], data[1], userType == 1);
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
             } else {
                 errorRespond.setText("Wrong username or password!");

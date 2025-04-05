@@ -4,14 +4,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import tcgshop.TCGApplication;
 
 import java.util.ArrayList;
 
 public class ItemBar extends VBox {
-    public ItemBar(TCGApplication tcgApplication, String category) {
+    public ItemBar(TCGApplication tcgApplication, ShopPane shopPane, String category) {
         // Call constructor from parent
         super();
 
@@ -33,7 +32,7 @@ public class ItemBar extends VBox {
         // Add item boxes into the list by retrieve from MySQL
         ArrayList<ArrayList<Object>> itemList = tcgApplication.getSQLConnector().getItems(category);
         for (ArrayList<Object> item : itemList) {
-            ItemBox itemBox = new ItemBox(item);
+            ItemBox itemBox = new ItemBox(shopPane, item);
             flowPane.getChildren().add(itemBox);
         }
 
@@ -61,8 +60,6 @@ public class ItemBar extends VBox {
 
         // Root config
         this.getChildren().add(scrollPane);
-        GridPane.setMargin(this, new Insets(20));
         this.setPadding(new Insets(20));
-        this.setSpacing(20);
     }
 }

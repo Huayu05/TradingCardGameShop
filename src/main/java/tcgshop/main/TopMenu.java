@@ -75,6 +75,26 @@ public class TopMenu extends HBox {
                 "-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.5, 0, 0);"
         );
 
+        dropboxButton.setOnMouseEntered(_ -> dropboxButton.setStyle(
+                "-fx-font-family: Verdana;" +
+                "-fx-font-size: 20;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-color: #DDDDDD;" +
+                "-fx-text-fill: #222831;" +
+                "-fx-background-radius: 8px;" +
+                "-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.45), 10, 0.6, 0, 0);"
+        ));
+
+        dropboxButton.setOnMouseExited(_ -> dropboxButton.setStyle(
+                "-fx-font-family: Verdana;" +
+                "-fx-font-size: 20;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-color: #DDDDDD;" +
+                "-fx-text-fill: #222831;" +
+                "-fx-background-radius: 8px;" +
+                "-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.5, 0, 0);"
+        ));
+
         // HBox config
         this.setPadding(new Insets(0, 40, 0, 40));
         this.setAlignment(Pos.CENTER);

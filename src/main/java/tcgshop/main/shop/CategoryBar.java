@@ -96,10 +96,10 @@ public class CategoryBar extends VBox {
         GridPane.setMargin(this, new Insets(30));
         GridPane.setVgrow(this, Priority.ALWAYS);
         GridPane.setHgrow(this, Priority.ALWAYS);
-        this.setMaxWidth(300);
+        this.setMaxWidth(350);
         this.setPadding(new Insets(20));
         this.setSpacing(20);
-        this.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.TOP_CENTER);
         this.setStyle(
                 "-fx-background-color: #393E46;" +
                 "-fx-background-radius: 20px;"

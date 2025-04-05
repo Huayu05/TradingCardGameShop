@@ -1,14 +1,20 @@
 package tcgshop.main.shop;
 
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
 
+import java.util.ArrayList;
+
 public class ShopPane extends GridPane {
+    // Items information
+    private ArrayList<ItemBox> items = new ArrayList<>();
+
     // Dynamic nodes
     private TCGApplication tcgApplication;
     private ItemBar itemBar;
+    private CartBar cartBar;
+    private VBox vBox;
 
     public ShopPane(TCGApplication tcgApplication) {
         // Call constructor from parent
@@ -21,9 +27,15 @@ public class ShopPane extends GridPane {
         CategoryBar catBar = new CategoryBar(tcgApplication, this);
         this.add(catBar, 0, 0);
 
-        // Build item bar
-        itemBar = new ItemBar(tcgApplication, "All");
-        this.add(itemBar, 1, 0);
+        // Build item bar and cart bar in a Vbox
+        itemBar = new ItemBar(tcgApplication, this, "All");
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        cartBar = new CartBar();
+        vBox = new VBox();
+        vBox.getChildren().addAll(itemBar, spacer, cartBar);
+        GridPane.setMargin(vBox, new Insets(30));
+        this.add(vBox, 1, 0);
 
         // Column constraint assign
         ColumnConstraints col1 = new ColumnConstraints();
@@ -41,8 +53,33 @@ public class ShopPane extends GridPane {
 
     // Item bar reset method
     public void resetItemBar(String category) {
-        this.getChildren().remove(itemBar);
-        this.itemBar = new ItemBar(tcgApplication, category);
-        this.add(itemBar, 1, 0);
+        this.getChildren().remove(vBox);
+        itemBar = new ItemBar(tcgApplication, this, category);
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        cartBar = new CartBar();
+        vBox = new VBox();
+        vBox.getChildren().addAll(itemBar, spacer, cartBar);
+        GridPane.setMargin(vBox, new Insets(30));
+        this.add(vBox, 1, 0);
+    }
+
+
+    // Add items
+    public void addItem(ItemBox item) {
+        items.add(item);
+    }
+
+
+    // Refresh total price and count
+    public void refreshCart() {
+        double subtotal = 0;
+        int itemCount = 0;
+        for (ItemBox item : items) {
+            itemCount += item.getItemChosen();
+            subtotal += (item.getItemChosen() * item.getItemPrice());
+        }
+        this.cartBar.setItemChosen(itemCount);
+        this.cartBar.setSubtotal(subtotal);
     }
 }
