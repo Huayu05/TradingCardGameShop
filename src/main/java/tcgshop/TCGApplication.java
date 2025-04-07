@@ -84,8 +84,13 @@ public class TCGApplication extends Application {
 
 
     // Setter method ( Primary Stage )
-    public void setPrimaryStage(Scene scene) {
-        primaryStage.setScene(scene);
+    public void setPrimaryStage(Scene newScene) {
+        Scene oldScene = primaryStage.getScene();
+        double width = oldScene.getWidth();
+        double height = oldScene.getHeight();
+        primaryStage.setScene(newScene);
+        primaryStage.setWidth(width);
+        primaryStage.setHeight(height);
     }
 
 
