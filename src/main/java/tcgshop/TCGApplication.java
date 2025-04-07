@@ -13,6 +13,7 @@ public class TCGApplication extends Application {
     private String password = "123456";
     private boolean isAdmin = true;
 
+
     // Parents in the class
     private LoginScene loginScene;
     private MainScene mainScene;

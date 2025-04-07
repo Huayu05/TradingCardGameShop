@@ -1,8 +1,10 @@
 package tcgshop.main.shop;
 
+import com.sun.tools.javac.Main;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
+import tcgshop.main.MainScene;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ public class ShopPane extends GridPane {
     private CartBar cartBar;
     private VBox vBox;
 
-    public ShopPane(TCGApplication tcgApplication) {
+    public ShopPane(TCGApplication tcgApplication, MainScene mainScene) {
         // Call constructor from parent
         super();
 
@@ -31,7 +33,7 @@ public class ShopPane extends GridPane {
         itemBar = new ItemBar(tcgApplication, this, "All");
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
-        cartBar = new CartBar();
+        cartBar = new CartBar(mainScene, this);
         vBox = new VBox();
         vBox.getChildren().addAll(itemBar, spacer, cartBar);
         GridPane.setMargin(vBox, new Insets(30));

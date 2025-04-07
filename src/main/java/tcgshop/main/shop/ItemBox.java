@@ -178,6 +178,12 @@ public class ItemBox extends VBox {
     }
 
 
+    // Item count edit method
+    public void editItemChosen(int count) {
+        this.itemChosen += count;
+    }
+
+
     // Getter method ( Quantity )
     public int getItemChosen() {
         return itemChosen;

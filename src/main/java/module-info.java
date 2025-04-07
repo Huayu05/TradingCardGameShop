@@ -4,6 +4,7 @@ module com.tcgshop.tradingcardgameshop {
     requires java.desktop;
     requires java.sql;
     requires mysql.connector.java;
+    requires jdk.compiler;
 
 
     opens tcgshop to javafx.fxml;

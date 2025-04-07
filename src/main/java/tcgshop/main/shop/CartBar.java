@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import tcgshop.main.MainScene;
 
 import java.text.DecimalFormat;
 
@@ -14,7 +15,7 @@ public class CartBar extends HBox {
     private Label itemCount;
     private Label subtotal;
 
-    public CartBar() {
+    public CartBar(MainScene mainScene, ShopPane shopPane) {
         // Call constructor from parent
         super();
 
@@ -33,6 +34,9 @@ public class CartBar extends HBox {
         );
 
         Button toCart = new Button("View Cart");
+        toCart.setOnAction(e -> {
+            shopPane.setVisible(false);
+            mainScene.getCartPane().setVisible(true);});
         toCart.setStyle(
                 "-fx-font-weight: bold;" +
                         "-fx-font-family: Verdana;" +

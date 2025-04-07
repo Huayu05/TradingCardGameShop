@@ -93,7 +93,7 @@ public class CategoryBar extends VBox {
         });
 
         // Category bar config
-        GridPane.setMargin(this, new Insets(30));
+        GridPane.setMargin(this, new Insets(40, 30, 40, 30));
         GridPane.setVgrow(this, Priority.ALWAYS);
         GridPane.setHgrow(this, Priority.ALWAYS);
         this.setMaxWidth(350);
