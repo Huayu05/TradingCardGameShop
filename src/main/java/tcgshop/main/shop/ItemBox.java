@@ -103,6 +103,7 @@ public class ItemBox extends VBox {
         Button minusButton = new Button("-");
         minusButton.setMinSize(25, 25);
         minusButton.setMaxSize(25, 25);
+        minusButton.setDisable(true);
         Button plusButton = new Button("+");
         plusButton.setMinSize(25, 25);
         plusButton.setMaxSize(25, 25);

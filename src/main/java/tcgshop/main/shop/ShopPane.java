@@ -57,7 +57,6 @@ public class ShopPane extends GridPane {
         itemBar = new ItemBar(tcgApplication, this, category);
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
-        cartBar = new CartBar();
         vBox = new VBox();
         vBox.getChildren().addAll(itemBar, spacer, cartBar);
         GridPane.setMargin(vBox, new Insets(30));
