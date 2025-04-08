@@ -1,6 +1,5 @@
 package tcgshop.main.shop;
 
-import com.sun.tools.javac.Main;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
@@ -14,6 +13,7 @@ public class ShopPane extends GridPane {
 
     // Dynamic nodes
     private TCGApplication tcgApplication;
+    private MainScene mainScene;
     private ItemBar itemBar;
     private CartBar cartBar;
     private VBox vBox;
@@ -24,6 +24,7 @@ public class ShopPane extends GridPane {
 
         // Initialize root
         this.tcgApplication = tcgApplication;
+        this.mainScene = mainScene;
 
         // Build category bar
         CategoryBar catBar = new CategoryBar(tcgApplication, this);
@@ -31,12 +32,10 @@ public class ShopPane extends GridPane {
 
         // Build item bar and cart bar in a Vbox
         itemBar = new ItemBar(tcgApplication, this, "All");
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
         cartBar = new CartBar(mainScene, this);
-        vBox = new VBox();
-        vBox.getChildren().addAll(itemBar, spacer, cartBar);
-        GridPane.setMargin(vBox, new Insets(30));
+        vBox = new VBox(20);
+        vBox.getChildren().addAll(itemBar, cartBar);
+        GridPane.setMargin(vBox, new Insets(35));
         this.add(vBox, 1, 0);
 
         // Column constraint assign
@@ -57,12 +56,16 @@ public class ShopPane extends GridPane {
     public void resetItemBar(String category) {
         this.getChildren().remove(vBox);
         itemBar = new ItemBar(tcgApplication, this, category);
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
-        vBox = new VBox();
-        vBox.getChildren().addAll(itemBar, spacer, cartBar);
-        GridPane.setMargin(vBox, new Insets(30));
+        vBox = new VBox(20);
+        vBox.getChildren().addAll(itemBar, cartBar);
+        GridPane.setMargin(vBox, new Insets(35));
         this.add(vBox, 1, 0);
+    }
+
+
+    // Clear items
+    public void clearItem() {
+        items = new ArrayList<>();
     }
 
 
@@ -73,8 +76,8 @@ public class ShopPane extends GridPane {
 
 
     // Refresh total price and count
-    public void refreshCart() {
-        double subtotal = 0;
+    public double refreshCart() {
+        double subtotal = 0.00;
         int itemCount = 0;
         for (ItemBox item : items) {
             itemCount += item.getItemChosen();
@@ -82,5 +85,7 @@ public class ShopPane extends GridPane {
         }
         this.cartBar.setItemChosen(itemCount);
         this.cartBar.setSubtotal(subtotal);
+        mainScene.getCartPane().getCartTotal().setSubtotal(subtotal);
+        return subtotal;
     }
 }

@@ -3,8 +3,10 @@ package tcgshop.main.shop;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import tcgshop.TCGApplication;
 
 import java.util.ArrayList;
@@ -23,11 +25,20 @@ public class ItemBar extends VBox {
         );
         this.getChildren().add(title);
 
+        // Shadow config
+        InnerShadow innerShadow = new InnerShadow();
+        innerShadow.setColor(Color.rgb(0, 0, 0, 0.3));
+        innerShadow.setRadius(8);
+        innerShadow.setChoke(0.5);
+        innerShadow.setOffsetX(0);
+        innerShadow.setOffsetY(0);
+        innerShadow.setRadius(0);
+
         // Flow pane config
         FlowPane flowPane = new FlowPane();
         flowPane.setHgap(10);
         flowPane.setVgap(10);
-        flowPane.setStyle("-fx-background-color: #EEEEEE;");
+
 
         // Add item boxes into the list by retrieve from MySQL
         ArrayList<ArrayList<Object>> itemList = tcgApplication.getSQLConnector().getItems(category);
@@ -53,13 +64,35 @@ public class ItemBar extends VBox {
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
-        scrollPane.setStyle(
-                "-fx-background-color: #EEEEEE;" +
-                "-fx-background-radius: 20;"
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+
+        // Stack pane config
+        StackPane scrollPaneWrapper = new StackPane();
+        scrollPaneWrapper.getChildren().add(scrollPane);
+        scrollPaneWrapper.setEffect(innerShadow);
+        scrollPaneWrapper.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(scrollPaneWrapper, Priority.ALWAYS);
+        scrollPaneWrapper.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                "-fx-background-radius: 20px;" +
+                "-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.5, 0, 0);"
         );
 
+        // Scroll pane in wrapper clipping
+        Rectangle clip = new Rectangle();
+        clip.setArcWidth(40);
+        clip.setArcHeight(40);
+        scrollPaneWrapper.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            clip.setWidth(newVal.getWidth());
+            clip.setHeight(newVal.getHeight());
+        });
+        scrollPaneWrapper.setClip(clip);
+
         // Root config
-        this.getChildren().add(scrollPane);
+        VBox.setMargin(this, new Insets(0, 30, 0, 0));
+        this.getChildren().add(scrollPaneWrapper);
         this.setPadding(new Insets(20));
+        this.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(this, Priority.ALWAYS);
     }
 }

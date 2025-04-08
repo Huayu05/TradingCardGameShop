@@ -1,12 +1,15 @@
 package tcgshop.main;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import tcgshop.TCGApplication;
 import tcgshop.main.shop.CartPane;
 import tcgshop.main.shop.ShopPane;
+
+import java.util.Objects;
 
 public class MainScene extends Scene {
     // Dynamic nodes
@@ -16,10 +19,23 @@ public class MainScene extends Scene {
 
     public MainScene(TCGApplication tcgApplication) {
         // Call constructor from parent class
-        super(new BorderPane(), 1000, 600);
+        super(new StackPane(), 1000, 650);
+
+        // Background StackPane setup
+        StackPane stackPaneRoot = (StackPane) getRoot();
+
+        // Background Image
+        Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());
+        ImageView bgImageView = new ImageView(bgImage);
+        bgImageView.setOpacity(0.5);
+        bgImageView.setPreserveRatio(false);
+        bgImageView.fitWidthProperty().bind(stackPaneRoot.widthProperty());
+        bgImageView.fitHeightProperty().bind(stackPaneRoot.heightProperty());
+        stackPaneRoot.getChildren().addFirst(bgImageView);
 
         // Root initializing
-        BorderPane root = (BorderPane) getRoot();
+        BorderPane root = new BorderPane();
+        stackPaneRoot.getChildren().add(root);
 
         // HBox of the top row menu
         topMenu = new TopMenu(tcgApplication, this);
@@ -38,7 +54,6 @@ public class MainScene extends Scene {
         // Root scene config
         root.setTop(topMenu);
         root.setCenter(stackPane);
-        root.setStyle("-fx-background-color: #EEEEEE");
     }
 
 

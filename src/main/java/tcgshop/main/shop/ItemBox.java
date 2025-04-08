@@ -74,6 +74,7 @@ public class ItemBox extends VBox {
         this.getChildren().add(itemName);
         itemName.setStyle(
                 "-fx-font-family: verdana;" +
+                "-fx-text-fill: #000000;" +
                 "-fx-font-size: 14;"
         );
 
@@ -82,6 +83,7 @@ public class ItemBox extends VBox {
         this.getChildren().add(itemPrice);
         itemPrice.setStyle(
                 "-fx-font-family: verdana;" +
+                "-fx-text-fill: #000000;" +
                 "-fx-font-size: 14;"
         );
 
@@ -113,30 +115,44 @@ public class ItemBox extends VBox {
 
         // Set the text field to only accept integers and validate range
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {  // Allow only digits
-                textField.setText(oldValue);
+            if (newValue.isEmpty()) {
+                return;
             }
-            else {
-                try {
-                    int value = Integer.parseInt(newValue);
-                    if (value < 0 || value > itemLeft) {  // Ensure value is within the range 0-100
-                        textField.setText(oldValue);  // Revert to the old value if out of range
+            if (!newValue.matches("\\d*")) {
+                textField.setText(oldValue);
+                return;
+            }
+            String cleaned = newValue.replaceFirst("^0+(?!$)", "");
+            try {
+                int value = Integer.parseInt(cleaned);
+                if (value < 0 || value > itemLeft) {
+                    textField.setText(oldValue);
+                }
+                else {
+                    if (!newValue.equals(cleaned)) {
+                        textField.setText(cleaned); // Update to cleaned version
                     }
-                    else {
-                        itemChosen = value;
-                        shopPane.refreshCart();
-                        if (value == itemLeft) {
-                            plusButton.setDisable(true);
-                            minusButton.setDisable(false);
-                        }
-                        if (value == 0) {
-                            plusButton.setDisable(false);
-                            minusButton.setDisable(true);
-                        }
+                    itemChosen = value;
+                    shopPane.refreshCart();
+                    if (value == itemLeft) {
+                        plusButton.setDisable(true);
+                        minusButton.setDisable(false);
+                    }
+                    if (value == 0) {
+                        plusButton.setDisable(false);
+                        minusButton.setDisable(true);
                     }
                 }
-                catch (NumberFormatException e) {
-                    textField.setText(oldValue);  // Revert to the old value if invalid number
+            }
+            catch (NumberFormatException e) {
+                textField.setText(oldValue);
+            }
+        });
+
+        textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText("0");
                 }
             }
         });

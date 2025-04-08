@@ -5,6 +5,8 @@ import javafx.animation.PauseTransition;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -34,22 +36,59 @@ public class GeneralFunction {
 
 
     // Method return tax in %
-    public static int loadTaxFromFile() {
+    public static int loadTax() {
         int tax = 0;
         try {
-            List<String> lines = Files.readAllLines(Paths.get("C:/myfolder/config.txt")); // full path
-            for (String line : lines) {
-                if (line.startsWith("Tax")) {
-                    String[] parts = line.split("=");
-                    if (parts.length == 2) {
-                        tax = Integer.parseInt(parts[1].trim());
-                        break;
+            var resource = (GeneralFunction.class.getResource("/tcgshop/data.txt"));
+            if (resource != null) {
+                List<String> lines = Files.readAllLines(Paths.get(resource.toURI()));
+                for (String line : lines) {
+                    if (line.startsWith("Tax")) {
+                        String[] parts = line.split("=");
+                        if (parts.length == 2) {
+                            tax = Integer.parseInt(parts[1].trim());
+                            break;
+                        }
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        catch (IOException e) {
+            System.out.println("ERROR: Cannot get tax");
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
         return tax;
+    }
+
+
+    // Method return discount in %
+    public static <Path> int loadDiscount() {
+        int discount = 0;
+        try {
+            var resource = (GeneralFunction.class.getResource("/tcgshop/data.txt"));
+            if (resource != null) {
+                List<String> lines = Files.readAllLines(Paths.get(resource.toURI()));
+                for (String line : lines) {
+                    if (line.startsWith("Discount")) {
+                        String[] parts = line.split("=");
+                        if (parts.length == 2) {
+                            discount = Integer.parseInt(parts[1].trim());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch (IOException e) {
+            System.out.println("ERROR: Cannot get discount");
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return discount;
     }
 }
