@@ -16,6 +16,9 @@ import javafx.scene.layout.VBox;
 import tcgshop.TCGApplication;
 
 public class ItemCategoryBar extends VBox {
+    // Dynamic nodes
+    private ListView<String> listView;
+
     public ItemCategoryBar(TCGApplication tcgApplication, ShopPane shopPane) {
         // Call constructor from parent
         super();
@@ -31,7 +34,7 @@ public class ItemCategoryBar extends VBox {
 
         // Scrollable list building for category ( Maximum 15 char )
         ObservableList<String> categoryList = FXCollections.observableArrayList("All");
-        ListView<String> listView = new ListView<>(categoryList);
+        listView = new ListView<>(categoryList);
         listView.setStyle(
                 "-fx-font-size: 18px;" +
                 "-fx-background-color: #393E46;"
@@ -78,19 +81,7 @@ public class ItemCategoryBar extends VBox {
 
         // Initialize category to All
         listView.getSelectionModel().select(0);
-        Platform.runLater(() -> {
-            Node node = listView.lookup(".list-cell");
-            if (node instanceof ListCell<?>) {
-                @SuppressWarnings("unchecked")
-                ListCell<String> firstCell = (ListCell<String>) node;
-                firstCell.setStyle(
-                        "-fx-background-color: #393E46;" +
-                                "-fx-text-fill: #00ADB5;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-padding: 0 0 0 20px;"
-                );
-            }
-        });
+        Platform.runLater(this::refocusAll);
 
         // Category bar config
         GridPane.setMargin(this, new Insets(40, 30, 40, 30));
@@ -105,5 +96,22 @@ public class ItemCategoryBar extends VBox {
                 "-fx-background-radius: 20px;"
         );
         this.getChildren().add(listView);
+    }
+
+
+    // Refocus all category
+    public void refocusAll() {
+        listView.getSelectionModel().select(0);
+        Node node = listView.lookup(".list-cell");
+        if (node instanceof ListCell<?>) {
+            @SuppressWarnings("unchecked")
+            ListCell<String> firstCell = (ListCell<String>) node;
+            firstCell.setStyle(
+                    "-fx-background-color: #393E46;" +
+                            "-fx-text-fill: #00ADB5;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-padding: 0 0 0 20px;"
+            );
+        }
     }
 }

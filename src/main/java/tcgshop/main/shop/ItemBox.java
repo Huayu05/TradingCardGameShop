@@ -23,6 +23,9 @@ public class ItemBox extends VBox {
 
     // Dynamic nodes
     private ShopPane shopPane;
+    private TextField textField;
+    private Button plusButton;
+    private Button minusButton;
 
     public ItemBox(ShopPane shopPane, ArrayList<Object> item) {
         // Call constructor from parent
@@ -104,14 +107,14 @@ public class ItemBox extends VBox {
     // Create a hbox of - + and a text field
     public HBox createCountBox() {
         // Nodes initialize
-        Button minusButton = new Button("-");
+        minusButton = new Button("-");
         minusButton.setMinSize(25, 25);
         minusButton.setMaxSize(25, 25);
         minusButton.setDisable(true);
-        Button plusButton = new Button("+");
+        plusButton = new Button("+");
         plusButton.setMinSize(25, 25);
         plusButton.setMaxSize(25, 25);
-        TextField textField = new TextField();
+        textField = new TextField();
         textField.setMaxSize(30, 30);
         textField.setText("0");  // Default value
 
@@ -198,13 +201,26 @@ public class ItemBox extends VBox {
 
     // Item count edit method
     public void editItemChosen(int count) {
-        this.itemChosen += count;
+        this.textField.setText(String.valueOf(count));
+        if (count == itemLeft) {
+            plusButton.setDisable(true);
+        }
+        if (count == 0) {
+            minusButton.setDisable(true);
+        }
+        this.itemChosen = count;
     }
 
 
     // Getter method ( Name )
     public String getItemName() {
         return itemName;
+    }
+
+
+    // Getter method ( Item Left )
+    public int getItemLeft() {
+        return itemLeft;
     }
 
 

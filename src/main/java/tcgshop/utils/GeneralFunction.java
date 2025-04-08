@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class GeneralFunction {
@@ -90,5 +91,12 @@ public class GeneralFunction {
         }
 
         return discount;
+    }
+
+
+    // Two decimal converter
+    public static String twoDecimalPlaces(double d) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(d);
     }
 }

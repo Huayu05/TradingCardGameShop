@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import tcgshop.main.MainScene;
+import tcgshop.utils.GeneralFunction;
 
 import java.text.DecimalFormat;
 
@@ -70,7 +71,6 @@ public class ItemCartBar extends HBox {
 
     // Setter method ( Subtotal )
     public void setSubtotal(double subtotal) {
-        DecimalFormat numberFormat = new DecimalFormat("0.00");
-        this.subtotal.setText("Subtotal: RM" + numberFormat.format(subtotal));
+        this.subtotal.setText("Subtotal: RM" + GeneralFunction.twoDecimalPlaces(subtotal));
     }
 }

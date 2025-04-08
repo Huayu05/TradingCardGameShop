@@ -10,8 +10,6 @@ import tcgshop.TCGApplication;
 import tcgshop.main.MainScene;
 import tcgshop.utils.GeneralFunction;
 
-import java.text.DecimalFormat;
-
 public class CartTotal extends VBox {
     // Dynamic nodes
     private MainScene mainScene;
@@ -103,6 +101,7 @@ public class CartTotal extends VBox {
             mainScene.getCartPane().setVisible(false);
             mainScene.getShopPane().clearItem();
             mainScene.resetAll();
+            mainScene.getShopPane().getCatBar().refocusAll();
         });
         this.getChildren().add(pay);
         pay.setStyle(
@@ -187,20 +186,19 @@ public class CartTotal extends VBox {
     // Refresh all amount
     public void refreshAmount() {
         double subtotal = mainScene.getShopPane().refreshCart();
-        DecimalFormat numberFormat = new DecimalFormat("0.00");
-        int discountPercent = GeneralFunction.loadDiscount();
-        this.discountLabel.setText("Discount (" + discountPercent + "%) :");
-        this.discount.setText(numberFormat.format(-1 * subtotal * GeneralFunction.loadDiscount() / 100));
-        int taxPercent = GeneralFunction.loadTax();
-        this.taxLabel.setText("Tax (" + taxPercent + "%) :");
-        this.tax.setText(numberFormat.format((subtotal - (subtotal * discountPercent /100)* taxPercent / 100)));
-        this.total.setText(numberFormat.format(subtotal + (subtotal * taxPercent / 100) - (subtotal * discountPercent / 100)));
     }
 
 
     // Setter method ( Subtotal )
     public void setSubtotal(double subtotal) {
-        DecimalFormat numberFormat = new DecimalFormat("0.00");
-        this.subtotal.setText(numberFormat.format(subtotal));
+        this.subtotal.setText(GeneralFunction.twoDecimalPlaces(subtotal));
+        int discountPercent = GeneralFunction.loadDiscount();
+        this.discountLabel.setText("Discount (" + discountPercent + "%) :");
+        this.discount.setText(GeneralFunction.twoDecimalPlaces(-1 * subtotal * GeneralFunction.loadDiscount() / 100));
+        int taxPercent = GeneralFunction.loadTax();
+        this.taxLabel.setText("Tax (" + taxPercent + "%) :");
+        double taxAfterDisc = (subtotal - (subtotal * discountPercent / 100)) * taxPercent / 100;
+        this.tax.setText(GeneralFunction.twoDecimalPlaces(taxAfterDisc));
+        this.total.setText(GeneralFunction.twoDecimalPlaces(subtotal - (subtotal * GeneralFunction.loadDiscount() / 100) + taxAfterDisc));
     }
 }

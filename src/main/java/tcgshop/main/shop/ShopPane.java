@@ -14,6 +14,7 @@ public class ShopPane extends GridPane {
     // Dynamic nodes
     private TCGApplication tcgApplication;
     private MainScene mainScene;
+    private ItemCategoryBar itemCategoryBar;
     private ItemBar itemBar;
     private ItemCartBar itemCartBar;
     private VBox vBox;
@@ -27,8 +28,8 @@ public class ShopPane extends GridPane {
         this.mainScene = mainScene;
 
         // Build category bar
-        ItemCategoryBar catBar = new ItemCategoryBar(tcgApplication, this);
-        this.add(catBar, 0, 0);
+        itemCategoryBar = new ItemCategoryBar(tcgApplication, this);
+        this.add(itemCategoryBar, 0, 0);
 
         // Build item bar and cart bar in a Vbox
         itemBar = new ItemBar(tcgApplication, this, "All");
@@ -87,6 +88,12 @@ public class ShopPane extends GridPane {
         this.itemCartBar.setSubtotal(subtotal);
         mainScene.getCartPane().getCartTotal().setSubtotal(subtotal);
         return subtotal;
+    }
+
+
+    // Getter method ( Category bar )
+    public ItemCategoryBar getCatBar() {
+        return itemCategoryBar;
     }
 
 

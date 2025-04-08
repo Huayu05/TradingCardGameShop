@@ -66,7 +66,15 @@ public class MainScene extends Scene {
     // Reset all layouts
     public void resetAll() {
         root.getChildren().clear();
-        // Root initializing
+
+        Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());
+        ImageView bgImageView = new ImageView(bgImage);
+        bgImageView.setOpacity(0.5);
+        bgImageView.setPreserveRatio(false);
+        bgImageView.fitWidthProperty().bind(root.widthProperty());
+        bgImageView.fitHeightProperty().bind(root.heightProperty());
+        root.getChildren().addFirst(bgImageView);
+
         borderPane = new BorderPane();
         root.getChildren().add(borderPane);
         topMenu = new TopMenu(tcgApplication, this);

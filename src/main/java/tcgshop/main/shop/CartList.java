@@ -34,7 +34,7 @@ public class CartList extends VBox {
         // Add items pane
         for (ItemBox item : items) {
             if (item.getItemChosen() > 0) {
-                CartItem cartItem = new CartItem(item);
+                CartItem cartItem = new CartItem(mainScene, item);
                 vBox.getChildren().add(cartItem);
             }
         }
