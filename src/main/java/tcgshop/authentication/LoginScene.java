@@ -17,9 +17,9 @@ public class LoginScene extends Scene {
     private LogInPane logInPane;
 
     // Constructor
-    public LoginScene(TCGApplication tcgApplication) {
+    public LoginScene(TCGApplication tcgApplication, double width, double height) {
         // Call constructor from parent class
-        super(new StackPane(), 1000, 600);
+        super(new StackPane(), width, height);
 
         // Background StackPane setup
         StackPane loginPageRoot = (StackPane) getRoot();

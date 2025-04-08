@@ -34,7 +34,7 @@ public class SQLConnector {
         }
 
         // MySQL query find related username and password
-        String query = "SELECT * FROM user WHERE `Username` = ? AND `Password` = ?";
+        String query = "SELECT * FROM users WHERE `Username` = ? AND `Password` = ?";
 
         // Try to prepare the statement and execute
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -69,7 +69,7 @@ public class SQLConnector {
         }
 
         // MySQL query setup
-        String query = "INSERT INTO user(`Username`, `Password`, `IsAdmin`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users(`Username`, `Password`, `IsAdmin`) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -80,7 +80,7 @@ public class SQLConnector {
 
         // Print error if failed
         catch (Exception e) {
-            System.out.println(" ERROR: Unable to add user");
+            System.out.println(" ERROR: Unable to add users");
             return false;
         }
     }
@@ -88,7 +88,7 @@ public class SQLConnector {
     // User comparison from database method
     public boolean compareUsers(String username) {
         // MySQL query find related username
-        String query = "SELECT * FROM user WHERE `Username` = ?";
+        String query = "SELECT * FROM users WHERE `Username` = ?";
 
         // Try to prepare the statement and execute
         try (PreparedStatement stmt = conn.prepareStatement(query)) {

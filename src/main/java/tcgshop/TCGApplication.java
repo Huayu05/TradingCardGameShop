@@ -29,10 +29,10 @@ public class TCGApplication extends Application {
         sqlConnector = new SQLConnector();
 
         // Shop Page Initialize
-        mainScene = new MainScene(this);
+        mainScene = new MainScene(this, 1000, 600);
 
         // Login Page Initialize
-        loginScene = new LoginScene(this);
+        loginScene = new LoginScene(this, 1000, 600);
 
         // Stage config
         primaryStage.setScene(mainScene);
@@ -61,7 +61,9 @@ public class TCGApplication extends Application {
 
     // Main scene reset method
     public void resetMainScene() {
-        this.mainScene = new MainScene(this);
+        double width = mainScene.getWidth();
+        double height = mainScene.getHeight();
+        this.mainScene = new MainScene(this, width, height);
         mainScene.getTopMenu().setUsernameLabel(username);
     }
 
@@ -86,9 +88,14 @@ public class TCGApplication extends Application {
 
     // Setter method ( Primary Stage )
     public void setPrimaryStage(Scene newScene) {
-        Scene oldScene = primaryStage.getScene();
-        double width = oldScene.getWidth();
-        double height = oldScene.getHeight();
+        double width = primaryStage.getWidth();
+        double height = primaryStage.getHeight();
+        if (newScene instanceof MainScene) {
+            mainScene = new MainScene(this, width, height);
+        }
+        else if (newScene instanceof LoginScene) {
+            loginScene = new LoginScene(this, width, height);
+        }
         primaryStage.setScene(newScene);
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);

@@ -20,15 +20,17 @@ public class MainScene extends Scene {
     private CartPane cartPane;
     private TopMenu topMenu;
 
-    public MainScene(TCGApplication tcgApplication) {
+    public MainScene(TCGApplication tcgApplication, double width, double height) {
         // Call constructor from parent class
-        super(new StackPane(), 1000, 650);
+        super(new StackPane(), width, height);
 
         // Initialize dynamic nodes
         this.tcgApplication = tcgApplication;
 
         // Background StackPane setup
         root = (StackPane) getRoot();
+        root.prefHeightProperty().bind(this.heightProperty());
+        root.prefWidthProperty().bind(this.widthProperty());
 
         // Background Image
         Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());
