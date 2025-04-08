@@ -8,14 +8,19 @@ import tcgshop.main.MainScene;
 
 public class CartPane extends GridPane {
     // Dynamic node
+    private MainScene mainScene;
     private CartTotal cartTotal;
+    private CartList cartList;
 
     public CartPane(TCGApplication tcgApplication, MainScene mainScene) {
         // Call constructor from parent
         super();
 
+        // Dynamic node
+        this.mainScene = mainScene;
+
         // Cart list build
-        CartList cartList = new CartList();
+        cartList = new CartList(mainScene);
         this.add(cartList, 0, 0);
 
         cartTotal = new CartTotal(tcgApplication, mainScene);
@@ -32,6 +37,15 @@ public class CartPane extends GridPane {
 
         // Grid pane config
         this.getColumnConstraints().addAll(col1, col2);
+    }
+
+
+
+    // Refresh cart list
+    public void refreshCartList() {
+        this.getChildren().remove(cartList);
+        this.cartList = new CartList(mainScene);
+        this.add(cartList, 0, 0);
     }
 
 

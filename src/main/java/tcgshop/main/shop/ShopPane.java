@@ -15,7 +15,7 @@ public class ShopPane extends GridPane {
     private TCGApplication tcgApplication;
     private MainScene mainScene;
     private ItemBar itemBar;
-    private CartBar cartBar;
+    private ItemCartBar itemCartBar;
     private VBox vBox;
 
     public ShopPane(TCGApplication tcgApplication, MainScene mainScene) {
@@ -27,14 +27,14 @@ public class ShopPane extends GridPane {
         this.mainScene = mainScene;
 
         // Build category bar
-        CategoryBar catBar = new CategoryBar(tcgApplication, this);
+        ItemCategoryBar catBar = new ItemCategoryBar(tcgApplication, this);
         this.add(catBar, 0, 0);
 
         // Build item bar and cart bar in a Vbox
         itemBar = new ItemBar(tcgApplication, this, "All");
-        cartBar = new CartBar(mainScene, this);
+        itemCartBar = new ItemCartBar(mainScene, this);
         vBox = new VBox(20);
-        vBox.getChildren().addAll(itemBar, cartBar);
+        vBox.getChildren().addAll(itemBar, itemCartBar);
         GridPane.setMargin(vBox, new Insets(35));
         this.add(vBox, 1, 0);
 
@@ -57,7 +57,7 @@ public class ShopPane extends GridPane {
         this.getChildren().remove(vBox);
         itemBar = new ItemBar(tcgApplication, this, category);
         vBox = new VBox(20);
-        vBox.getChildren().addAll(itemBar, cartBar);
+        vBox.getChildren().addAll(itemBar, itemCartBar);
         GridPane.setMargin(vBox, new Insets(35));
         this.add(vBox, 1, 0);
     }
@@ -83,9 +83,16 @@ public class ShopPane extends GridPane {
             itemCount += item.getItemChosen();
             subtotal += (item.getItemChosen() * item.getItemPrice());
         }
-        this.cartBar.setItemChosen(itemCount);
-        this.cartBar.setSubtotal(subtotal);
+        this.itemCartBar.setItemChosen(itemCount);
+        this.itemCartBar.setSubtotal(subtotal);
         mainScene.getCartPane().getCartTotal().setSubtotal(subtotal);
         return subtotal;
     }
+
+
+    // Getter method ( Chosen Item List )
+    public ArrayList<ItemBox> getItems() {
+        return items;
+    }
+
 }

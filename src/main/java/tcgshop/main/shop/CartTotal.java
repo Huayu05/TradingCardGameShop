@@ -102,8 +102,7 @@ public class CartTotal extends VBox {
             mainScene.getShopPane().setVisible(true);
             mainScene.getCartPane().setVisible(false);
             mainScene.getShopPane().clearItem();
-            tcgApplication.resetMainScene();
-            tcgApplication.setPrimaryStage(mainScene);
+            mainScene.resetAll();
         });
         this.getChildren().add(pay);
         pay.setStyle(

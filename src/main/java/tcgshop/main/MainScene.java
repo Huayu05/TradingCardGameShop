@@ -13,6 +13,9 @@ import java.util.Objects;
 
 public class MainScene extends Scene {
     // Dynamic nodes
+    private TCGApplication tcgApplication;
+    private StackPane root;
+    private BorderPane borderPane;
     private ShopPane shopPane;
     private CartPane cartPane;
     private TopMenu topMenu;
@@ -21,21 +24,24 @@ public class MainScene extends Scene {
         // Call constructor from parent class
         super(new StackPane(), 1000, 650);
 
+        // Initialize dynamic nodes
+        this.tcgApplication = tcgApplication;
+
         // Background StackPane setup
-        StackPane stackPaneRoot = (StackPane) getRoot();
+        root = (StackPane) getRoot();
 
         // Background Image
         Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());
         ImageView bgImageView = new ImageView(bgImage);
         bgImageView.setOpacity(0.5);
         bgImageView.setPreserveRatio(false);
-        bgImageView.fitWidthProperty().bind(stackPaneRoot.widthProperty());
-        bgImageView.fitHeightProperty().bind(stackPaneRoot.heightProperty());
-        stackPaneRoot.getChildren().addFirst(bgImageView);
+        bgImageView.fitWidthProperty().bind(root.widthProperty());
+        bgImageView.fitHeightProperty().bind(root.heightProperty());
+        root.getChildren().addFirst(bgImageView);
 
         // Root initializing
-        BorderPane root = new BorderPane();
-        stackPaneRoot.getChildren().add(root);
+        borderPane = new BorderPane();
+        root.getChildren().add(borderPane);
 
         // HBox of the top row menu
         topMenu = new TopMenu(tcgApplication, this);
@@ -52,8 +58,25 @@ public class MainScene extends Scene {
         stackPane.getChildren().addAll(cartPane, shopPane);
 
         // Root scene config
-        root.setTop(topMenu);
-        root.setCenter(stackPane);
+        borderPane.setTop(topMenu);
+        borderPane.setCenter(stackPane);
+    }
+
+
+    // Reset all layouts
+    public void resetAll() {
+        root.getChildren().clear();
+        // Root initializing
+        borderPane = new BorderPane();
+        root.getChildren().add(borderPane);
+        topMenu = new TopMenu(tcgApplication, this);
+        shopPane = new ShopPane(tcgApplication, this);
+        cartPane = new CartPane(tcgApplication, this);
+        cartPane.setVisible(false);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(cartPane, shopPane);
+        borderPane.setTop(topMenu);
+        borderPane.setCenter(stackPane);
     }
 
 

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class ItemBox extends VBox {
     // Item information
+    private  String itemName;
     private double itemPrice;
     private int itemLeft;
     private int itemChosen = 0;
@@ -28,8 +29,9 @@ public class ItemBox extends VBox {
         super();
 
         // Save item details and add to array list in parent
-        this.itemLeft = (int) item.get(3);
+        this.itemName = (String) item.get(1);
         this.itemPrice = (double) item.get(2);
+        this.itemLeft = (int) item.get(3);
         this.shopPane = shopPane;
         shopPane.addItem(this);
 
@@ -197,6 +199,12 @@ public class ItemBox extends VBox {
     // Item count edit method
     public void editItemChosen(int count) {
         this.itemChosen += count;
+    }
+
+
+    // Getter method ( Name )
+    public String getItemName() {
+        return itemName;
     }
 
 
