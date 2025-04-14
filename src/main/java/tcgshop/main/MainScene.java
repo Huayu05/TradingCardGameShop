@@ -29,8 +29,7 @@ public class MainScene extends Scene {
 
         // Background StackPane setup
         root = (StackPane) getRoot();
-        root.prefHeightProperty().bind(this.heightProperty());
-        root.prefWidthProperty().bind(this.widthProperty());
+        root.setPrefSize(width, height);
 
         // Background Image
         Image bgImage = new Image(Objects.requireNonNull(getClass().getResource("/tcgshop/images/pokeball_background_picture.png")).toExternalForm());

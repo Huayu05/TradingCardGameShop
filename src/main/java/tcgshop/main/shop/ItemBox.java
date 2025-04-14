@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import tcgshop.utils.GeneralFunction;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,12 @@ public class ItemBox extends VBox {
         this.itemLeft = (int) item.get(3);
         this.shopPane = shopPane;
         shopPane.addItem(this);
+
+        // Out of stock image
+        Image noStock = new Image("file:src/main/resources/tcgshop/images/out_of_stock.png");
+        ImageView noStockView = new ImageView(noStock);
+        noStockView.setFitHeight(100);
+        noStockView.setFitWidth(100);
 
         // Item picture
         Image image = new Image("file:src/main/resources/tcgshop/images/items/" + item.get(1) + ".png");
@@ -65,6 +72,9 @@ public class ItemBox extends VBox {
         // Stack pane for both image and item left
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(imageView, itemLeft);
+        if (this.itemLeft == 0) {
+            stackPane.getChildren().add(noStockView);
+        }
         stackPane.setAlignment(Pos.BOTTOM_CENTER);
         stackPane.setMaxSize(120, 160);
         this.getChildren().add(stackPane);
@@ -84,7 +94,7 @@ public class ItemBox extends VBox {
         );
 
         // Item price
-        Label itemPrice = new Label("RM" + item.get(2));
+        Label itemPrice = new Label("RM" + GeneralFunction.twoDecimalPlaces(this.itemPrice));
         this.getChildren().add(itemPrice);
         itemPrice.setStyle(
                 "-fx-font-family: verdana;" +
@@ -97,8 +107,8 @@ public class ItemBox extends VBox {
         this.getChildren().add(hBox);
 
         // VBox config
-        this.setMaxSize(150, 250);
-        this.setMinSize(150, 250);
+        this.setMaxSize(180, 250);
+        this.setMinSize(180, 250);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(0);
     }
@@ -110,10 +120,15 @@ public class ItemBox extends VBox {
         minusButton = new Button("-");
         minusButton.setMinSize(25, 25);
         minusButton.setMaxSize(25, 25);
-        minusButton.setDisable(true);
+        if (this.itemChosen == 0) {
+            minusButton.setDisable(true);
+        }
         plusButton = new Button("+");
         plusButton.setMinSize(25, 25);
         plusButton.setMaxSize(25, 25);
+        if (this.itemChosen == itemLeft) {
+            plusButton.setDisable(true);
+        }
         textField = new TextField();
         textField.setMaxSize(30, 30);
         textField.setText("0");  // Default value

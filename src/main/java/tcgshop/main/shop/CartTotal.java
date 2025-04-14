@@ -2,16 +2,24 @@ package tcgshop.main.shop;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import tcgshop.TCGApplication;
 import tcgshop.main.MainScene;
 import tcgshop.utils.GeneralFunction;
 
+import java.util.ArrayList;
+
 public class CartTotal extends VBox {
     // Dynamic nodes
+    private TCGApplication tcgApplication;
     private MainScene mainScene;
     private Label subtotal;
     private Label taxLabel;
@@ -24,8 +32,9 @@ public class CartTotal extends VBox {
         // Call constructor from parent
         super();
 
-        // Initialize main scene
+        // Initialize dynamic nodes
         this.mainScene = mainScene;
+        this.tcgApplication = tcgApplication;
 
         // Title
         Label title = new Label("Bill Summary");
@@ -96,13 +105,7 @@ public class CartTotal extends VBox {
 
         // Pay button
         Button pay = new Button("Pay Now");
-        pay.setOnAction(e -> {
-            mainScene.getShopPane().setVisible(true);
-            mainScene.getCartPane().setVisible(false);
-            mainScene.getShopPane().clearItem();
-            mainScene.resetAll();
-            mainScene.getShopPane().getCatBar().refocusAll();
-        });
+        pay.setOnAction(e -> payment());
         this.getChildren().add(pay);
         pay.setStyle(
                 "-fx-font-family: Verdana;" +
@@ -178,7 +181,8 @@ public class CartTotal extends VBox {
         this.setAlignment(Pos.TOP_CENTER);
         this.setStyle(
                 "-fx-background-color: #393E46;" +
-                "-fx-background-radius: 20px;"
+                "-fx-background-radius: 20px;" +
+                "-fx-effect: dropshadow(gaussian, #0000006F, 20, 0.5, 0, 0);"
         );
     }
 
@@ -186,6 +190,64 @@ public class CartTotal extends VBox {
     // Refresh all amount
     public void refreshAmount() {
         double subtotal = mainScene.getShopPane().refreshCart();
+    }
+
+
+    // Pop out window
+    public void payment() {
+        ArrayList<ItemBox> itemPurchase = new ArrayList<>();
+        for (ItemBox item : mainScene.getShopPane().getItems()) {
+            if (item.getItemChosen() > 0) {
+                itemPurchase.add(item);
+            }
+        }
+        if (itemPurchase.isEmpty()) {
+            popupWindow(false);
+            return;
+        }
+        int billID = tcgApplication.getSQLConnector().createBill(tcgApplication.getUsername());
+        for (ItemBox item : itemPurchase) {
+            tcgApplication.getSQLConnector().deductItem(item, billID);
+        }
+
+        popupWindow(true);
+
+        mainScene.getShopPane().setVisible(true);
+        mainScene.getCartPane().setVisible(false);
+        mainScene.getShopPane().clearItem();
+        mainScene.resetAll();
+        mainScene.getShopPane().getCatBar().refocusAll();
+    }
+
+
+    // Popup method
+    public void popupWindow(boolean valid) {
+        HBox popUpBox = new HBox(20);
+        popUpBox.setStyle("-fx-background-color: #EEEEEE;");
+        popUpBox.setPrefSize(300, 100);
+        popUpBox.setAlignment(Pos.CENTER);
+        Image image = valid ? new Image("file:src/main/resources/tcgshop/images/green_tick.png") : new Image("file:src/main/resources/tcgshop/images/red_cross.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(70);
+        Label label = valid ? new Label("Payment Successful!") : new Label("Payment Failed!");
+        label.setStyle(
+                "-fx-font-family: verdana;" +
+                "-fx-text-fill: #000000;" +
+                "-fx-font-size: 14;"
+        );
+        Button button = new Button(valid ? "Back to Home" : "Back to Payment");
+        VBox vBox = new VBox(10, label, button);
+        vBox.setAlignment(Pos.CENTER);
+        popUpBox.getChildren().addAll(imageView, vBox);
+        Scene popUpScene = new Scene(popUpBox);
+        Stage popUp = new Stage();
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setScene(popUpScene);
+        popUp.setResizable(false);
+        popUp.setTitle(valid ? "Payment Successful" : "Payment Failed");
+        button.setOnAction(_ -> popUp.close());
+        popUp.showAndWait();
     }
 
 

@@ -9,8 +9,8 @@ import tcgshop.utils.SQLConnector;
 
 public class TCGApplication extends Application {
     // User information
-    private String username = "huayu";
-    private String password = "123456";
+    private String username = "admin";
+    private String password = "admin";
     private boolean isAdmin = true;
 
 
@@ -74,6 +74,12 @@ public class TCGApplication extends Application {
     }
 
 
+    // Getter method ( Username )
+    public String getUsername() {
+        return username;
+    }
+
+
     // Getter method ( Shop Scene )
     public MainScene getShopScene() {
         return mainScene;
@@ -91,14 +97,13 @@ public class TCGApplication extends Application {
         double width = primaryStage.getWidth();
         double height = primaryStage.getHeight();
         if (newScene instanceof MainScene) {
-            mainScene = new MainScene(this, width, height);
+            mainScene = new MainScene(this, width - 40, height - 40);
+            primaryStage.setScene(mainScene);
         }
         else if (newScene instanceof LoginScene) {
-            loginScene = new LoginScene(this, width, height);
+            loginScene = new LoginScene(this, width - 40, height - 40);
+            primaryStage.setScene(loginScene);
         }
-        primaryStage.setScene(newScene);
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
     }
 
 

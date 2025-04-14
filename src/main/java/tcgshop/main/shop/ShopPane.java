@@ -32,7 +32,7 @@ public class ShopPane extends GridPane {
         this.add(itemCategoryBar, 0, 0);
 
         // Build item bar and cart bar in a Vbox
-        itemBar = new ItemBar(tcgApplication, this, "All");
+        itemBar = new ItemBar(tcgApplication, this, items, "All");
         itemCartBar = new ItemCartBar(mainScene, this);
         vBox = new VBox(20);
         vBox.getChildren().addAll(itemBar, itemCartBar);
@@ -56,7 +56,7 @@ public class ShopPane extends GridPane {
     // Item bar reset method
     public void resetItemBar(String category) {
         this.getChildren().remove(vBox);
-        itemBar = new ItemBar(tcgApplication, this, category);
+        itemBar = new ItemBar(tcgApplication, this, items, category);
         vBox = new VBox(20);
         vBox.getChildren().addAll(itemBar, itemCartBar);
         GridPane.setMargin(vBox, new Insets(35));

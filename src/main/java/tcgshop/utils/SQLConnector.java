@@ -1,5 +1,7 @@
 package tcgshop.utils;
 
+import tcgshop.main.shop.ItemBox;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -169,7 +171,6 @@ public class SQLConnector {
                     item.add(rs.getString("ItemName"));
                     item.add(rs.getDouble("ItemPrice"));
                     item.add(rs.getInt("ItemLeft"));
-                    item.add(rs.getString("Description"));
                     itemsList.add(item);
                 }
             }
@@ -181,5 +182,73 @@ public class SQLConnector {
         }
 
         return itemsList;
+    }
+
+
+    // Create bill
+    public int createBill(String username) {
+        // Check connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return 0;
+        }
+
+        // MySQL query create new bill
+        String query = "INSERT INTO bills (`UserID`, `BillDate`, `TaxPercent`, `DiscountPercent`) VALUES ((SELECT UserID FROM users WHERE userName = ?), NOW(), ?, ?);";
+        // Try to prepare the statement and execute
+        try (PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, username);
+            stmt.setInt(2, GeneralFunction.loadTax());
+            stmt.setInt(3, GeneralFunction.loadDiscount());
+            stmt.executeUpdate();
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        }
+        // Print error if failed
+        catch (SQLException e) {
+            System.out.println(" ERROR: Bill create failed.");
+            System.out.println(username);
+            System.out.println(e);
+        }
+        return -1;
+    }
+
+
+    // Deduct sold item
+    public void deductItem(ItemBox itemBox, int billID) {
+        // Check connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return;
+        }
+
+        // MySQL query update to new amount
+        String query1 = "INSERT INTO sells (`ItemID`, `ItemCount`, `ItemPrice`, `BillID`) VALUES ((SELECT `ItemID` FROM items WHERE `ItemName` = ?), ?, (SELECT `ItemPrice` FROM items WHERE `ItemName` = ?), ?);";
+        String query2 = "UPDATE items SET `ItemLeft` = `ItemLeft` - ? WHERE (`ItemName` = ?);";
+
+        // Try to prepare the statement and execute
+        try {
+            try (PreparedStatement stmt = conn.prepareStatement(query1)) {
+                stmt.setString(1, itemBox.getItemName());
+                stmt.setInt(2, itemBox.getItemChosen());
+                stmt.setString(3, itemBox.getItemName());
+                stmt.setInt(4, billID);
+                stmt.executeUpdate();
+            }
+            try (PreparedStatement stmt = conn.prepareStatement(query2)) {
+                stmt.setInt(1, itemBox.getItemChosen());
+                stmt.setString(2, itemBox.getItemName());
+                stmt.executeUpdate();
+            }
+        }
+
+        // Print error if failed
+        catch (SQLException e) {
+            System.out.println(" ERROR: Item deduct failed.");
+            System.out.println(e.getMessage());
+        }
     }
 }

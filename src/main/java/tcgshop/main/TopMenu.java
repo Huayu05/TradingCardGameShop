@@ -49,7 +49,7 @@ public class TopMenu extends HBox {
         
         // Username welcome vbox
         Label usernameLabelOne = new Label("Welcome Back,");
-        usernameLabelTwo = new Label("Anonymous ");
+        usernameLabelTwo = new Label(tcgApplication.getUsername() + " ");
         VBox usernameBox = new VBox(usernameLabelOne, usernameLabelTwo);
         usernameBox.setAlignment(Pos.CENTER_RIGHT);
         usernameLabelOne.setStyle(

@@ -93,7 +93,8 @@ public class ItemCategoryBar extends VBox {
         this.setAlignment(Pos.TOP_CENTER);
         this.setStyle(
                 "-fx-background-color: #393E46;" +
-                "-fx-background-radius: 20px;"
+                "-fx-background-radius: 20px;" +
+                "-fx-effect: dropshadow(gaussian, #0000006F, 20, 0.5, 0, 0);"
         );
         this.getChildren().add(listView);
     }

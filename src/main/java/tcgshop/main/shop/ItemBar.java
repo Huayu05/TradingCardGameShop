@@ -12,7 +12,7 @@ import tcgshop.TCGApplication;
 import java.util.ArrayList;
 
 public class ItemBar extends VBox {
-    public ItemBar(TCGApplication tcgApplication, ShopPane shopPane, String category) {
+    public ItemBar(TCGApplication tcgApplication, ShopPane shopPane, ArrayList<ItemBox> oldItemBoxArrayList, String category) {
         // Call constructor from parent
         super();
 
@@ -43,8 +43,20 @@ public class ItemBar extends VBox {
         // Add item boxes into the list by retrieve from MySQL
         ArrayList<ArrayList<Object>> itemList = tcgApplication.getSQLConnector().getItems(category);
         for (ArrayList<Object> item : itemList) {
-            ItemBox itemBox = new ItemBox(shopPane, item);
-            flowPane.getChildren().add(itemBox);
+            ItemBox itemBox = null;
+            for (ItemBox oldItemBox : oldItemBoxArrayList) {
+                if (oldItemBox.getItemName().equals(item.get(1).toString())) {
+                    itemBox = oldItemBox;
+                    break;
+                }
+            }
+            if (itemBox != null) {
+                flowPane.getChildren().add(itemBox);
+            }
+            else {
+                itemBox = new ItemBox(shopPane, item);
+                flowPane.getChildren().add(itemBox);
+            }
         }
 
         // Add message if the list was empty
@@ -91,7 +103,7 @@ public class ItemBar extends VBox {
         // Root config
         VBox.setMargin(this, new Insets(0, 30, 0, 0));
         this.getChildren().add(scrollPaneWrapper);
-        this.setPadding(new Insets(20));
+        this.setPadding(new Insets(20, 0, 20, 0));
         this.setMaxWidth(Double.MAX_VALUE);
         VBox.setVgrow(this, Priority.ALWAYS);
     }
