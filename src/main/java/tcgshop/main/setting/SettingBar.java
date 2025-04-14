@@ -9,6 +9,9 @@ import javafx.scene.shape.Rectangle;
 import tcgshop.TCGApplication;
 
 public class SettingBar extends VBox {
+    // Dynamic nodes
+    private StackPane base;
+
     public SettingBar(TCGApplication tcgApplication) {
         // Call constructor from parent
         super();
@@ -22,52 +25,61 @@ public class SettingBar extends VBox {
         innerShadow.setOffsetY(0);
         innerShadow.setRadius(0);
 
-        // Flow pane config
-        FlowPane flowPane = new FlowPane();
-        flowPane.setHgap(10);
-        flowPane.setVgap(10);
-
-        // Add message if the list was empty
-        if (flowPane.getChildren().isEmpty()) {
-            Label nothingLabel = new Label("   Choose an option   ");
-            nothingLabel.setStyle(
-                    "-fx-font-weight: bold;" +
-                    "-fx-text-fill: black;" +
-                    "-fx-font-size: 18;" +
-                    "-fx-font-family: verdana;"
-            );
-            flowPane.getChildren().add(nothingLabel);
-            FlowPane.setMargin(nothingLabel, new Insets(20, 20, 0, 20));
-        }
-
-
         // Stack pane config
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(flowPane);
-        stackPane.setEffect(innerShadow);
-        stackPane.setMaxHeight(Double.MAX_VALUE);
-        VBox.setVgrow(stackPane, Priority.ALWAYS);
-        stackPane.setStyle(
+        base = new StackPane();
+        base.setEffect(innerShadow);
+        base.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(base, Priority.ALWAYS);
+        base.setStyle(
                 "-fx-background-color: #FFFFFF;" +
                 "-fx-background-radius: 20px;" +
                 "-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.5, 0, 0);"
         );
 
-        // Scroll pane in wrapper clipping
+        // Base stack pane in wrapper clipping
         Rectangle clip = new Rectangle();
         clip.setArcWidth(40);
         clip.setArcHeight(40);
-        stackPane.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+        base.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
             clip.setWidth(newVal.getWidth());
             clip.setHeight(newVal.getHeight());
         });
-        stackPane.setClip(clip);
+        base.setClip(clip);
+
+        // Add message if the list was empty
+        if (base.getChildren().isEmpty()) {
+            Label nothingLabel = new Label("   Choose an option   ");
+            nothingLabel.setStyle(
+                    "-fx-font-weight: bold;" +
+                            "-fx-text-fill: black;" +
+                            "-fx-font-size: 18;" +
+                            "-fx-font-family: verdana;"
+            );
+            base.getChildren().add(nothingLabel);
+            StackPane.setMargin(nothingLabel, new Insets(20, 20, 0, 20));
+        }
 
         // Root config
         GridPane.setMargin(this, new Insets(30));
-        this.getChildren().add(stackPane);
+        this.getChildren().add(base);
         this.setPadding(new Insets(20, 0, 20, 0));
         this.setMaxWidth(Double.MAX_VALUE);
         VBox.setVgrow(this, Priority.ALWAYS);
+    }
+
+
+    // Change setting by index
+    public void settingChosen(int index) {
+        base.getChildren().clear();
+        switch (index) {
+            case 0:
+                base.getChildren().add(new HistorySetting());
+                break;
+            case 1:
+                System.out.println("Temp");
+                break;
+            default:
+                break;
+        }
     }
 }

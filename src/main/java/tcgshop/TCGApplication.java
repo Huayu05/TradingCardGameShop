@@ -97,11 +97,11 @@ public class TCGApplication extends Application {
         double width = primaryStage.getWidth();
         double height = primaryStage.getHeight();
         if (newScene instanceof MainScene) {
-            mainScene = new MainScene(this, width - 40, height - 40);
+            mainScene = new MainScene(this, width - 20, height - 35);
             primaryStage.setScene(mainScene);
         }
         else if (newScene instanceof LoginScene) {
-            loginScene = new LoginScene(this, width - 40, height - 40);
+            loginScene = new LoginScene(this, width - 20, height - 35);
             primaryStage.setScene(loginScene);
         }
     }

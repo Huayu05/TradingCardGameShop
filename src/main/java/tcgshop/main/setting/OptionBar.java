@@ -17,7 +17,7 @@ public class OptionBar extends VBox {
     // Dynamic nodes
     private ListView<String> listView;
 
-    public OptionBar(TCGApplication tcgApplication) {
+    public OptionBar(TCGApplication tcgApplication, SettingPane settingPane) {
         // Call constructor from parent
         super();
 
@@ -72,6 +72,7 @@ public class OptionBar extends VBox {
                             );
                         }
                         listView.getSelectionModel().select(getIndex());
+                        settingPane.getSettingBar().settingChosen(getIndex());
                     });
                 }
             }

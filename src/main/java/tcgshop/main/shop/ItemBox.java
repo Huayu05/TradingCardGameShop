@@ -244,6 +244,7 @@ public class ItemBox extends VBox {
         return itemChosen;
     }
 
+
     // Getter method ( Price )
     public double getItemPrice() {
         return itemPrice;

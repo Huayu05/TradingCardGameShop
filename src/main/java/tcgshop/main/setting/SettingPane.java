@@ -7,17 +7,19 @@ import tcgshop.TCGApplication;
 import tcgshop.main.MainScene;
 
 public class SettingPane extends GridPane {
+    // Dynamic nodes
+    private SettingBar settingBar;
 
     public SettingPane(TCGApplication tcgApplication, MainScene mainScene) {
         // Call constructor from parent
         super();
 
         // Option list initialize
-        OptionBar optionBar = new OptionBar(tcgApplication);
+        OptionBar optionBar = new OptionBar(tcgApplication, this);
         this.add(optionBar, 0, 0);
 
         // Setting contents
-        SettingBar settingBar = new SettingBar(tcgApplication);
+        settingBar = new SettingBar(tcgApplication);
         this.add(settingBar, 1, 0);
 
         // Column constraint assign
@@ -31,6 +33,12 @@ public class SettingPane extends GridPane {
 
         // Grid pane config
         this.getColumnConstraints().addAll(col1, col2);
+    }
+
+
+    // Getter method ( Setting Bar )
+    public SettingBar getSettingBar() {
+        return settingBar;
     }
 }
 
