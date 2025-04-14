@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import tcgshop.TCGApplication;
+import tcgshop.main.setting.SettingPane;
 import tcgshop.main.shop.CartPane;
 import tcgshop.main.shop.ShopPane;
 
@@ -16,6 +17,7 @@ public class MainScene extends Scene {
     private TCGApplication tcgApplication;
     private StackPane root;
     private BorderPane borderPane;
+    private SettingPane settingPane;
     private ShopPane shopPane;
     private CartPane cartPane;
     private TopMenu topMenu;
@@ -44,6 +46,10 @@ public class MainScene extends Scene {
         borderPane = new BorderPane();
         root.getChildren().add(borderPane);
 
+        // Setting page setup
+        settingPane = new SettingPane(tcgApplication, this);
+        settingPane.setVisible(false);
+
         // HBox of the top row menu
         topMenu = new TopMenu(tcgApplication, this);
 
@@ -56,7 +62,7 @@ public class MainScene extends Scene {
 
         // Stack Pane for all main UI
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(cartPane, shopPane);
+        stackPane.getChildren().addAll(settingPane, cartPane, shopPane);
 
         // Root scene config
         borderPane.setTop(topMenu);
@@ -81,9 +87,11 @@ public class MainScene extends Scene {
         topMenu = new TopMenu(tcgApplication, this);
         shopPane = new ShopPane(tcgApplication, this);
         cartPane = new CartPane(tcgApplication, this);
+        settingPane = new SettingPane(tcgApplication, this);
+        settingPane.setVisible(false);
         cartPane.setVisible(false);
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(cartPane, shopPane);
+        stackPane.getChildren().addAll(cartPane, shopPane, settingPane);
         borderPane.setTop(topMenu);
         borderPane.setCenter(stackPane);
     }
@@ -104,5 +112,11 @@ public class MainScene extends Scene {
     // Getter method ( Cart Pane )
     public CartPane getCartPane() {
         return cartPane;
+    }
+
+
+    // Getter method ( Setting Pane )
+    public SettingPane getSettingPane() {
+        return settingPane;
     }
 }

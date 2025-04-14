@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import tcgshop.main.MainScene;
 import tcgshop.utils.GeneralFunction;
 
-import java.text.DecimalFormat;
-
 public class ItemCartBar extends HBox {
     // Dynamic nodes
     private Label itemCount;
@@ -37,6 +35,7 @@ public class ItemCartBar extends HBox {
         Button toCart = new Button("View Cart");
         toCart.setOnAction(e -> {
             shopPane.setVisible(false);
+            mainScene.getSettingPane().setVisible(false);
             mainScene.getCartPane().refreshCartList();
             mainScene.getCartPane().setVisible(true);
             mainScene.getCartPane().getCartTotal().refreshAmount();});

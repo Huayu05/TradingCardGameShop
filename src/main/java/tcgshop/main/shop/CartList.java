@@ -41,13 +41,15 @@ public class CartList extends VBox {
 
         // Add message if the list was empty
         if (vBox.getChildren().isEmpty()) {
-            Label nothingLabel = new Label("No Items Available now");
+            Label nothingLabel = new Label("   No Items in Cart Now   ");
             nothingLabel.setStyle(
                     "-fx-font-weight: bold;" +
+                            "-fx-text-fill: black;" +
                             "-fx-font-size: 18;" +
                             "-fx-font-family: verdana;"
             );
             vBox.getChildren().add(nothingLabel);
+            VBox.setMargin(nothingLabel, new Insets(20, 20, 0, 20));
         }
 
         // Scroll pane config

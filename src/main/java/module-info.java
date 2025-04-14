@@ -17,4 +17,6 @@ module com.tcgshop.tradingcardgameshop {
     opens tcgshop.main to javafx.fxml;
     exports tcgshop.main.shop to javafx.fxml;
     opens tcgshop.main.shop to javafx.fxml;
+    exports tcgshop.main.setting to javafx.fxml;
+    opens tcgshop.main.setting to javafx.fxml;
 }

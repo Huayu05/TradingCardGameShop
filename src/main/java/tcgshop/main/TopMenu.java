@@ -16,6 +16,7 @@ import tcgshop.TCGApplication;
 public class TopMenu extends HBox {
     // Dynamic nodes
     private TCGApplication tcgApplication;
+    private MainScene mainScene;
     private Label usernameLabelTwo;
 
     public TopMenu(TCGApplication tcgApplication, MainScene mainScene) {
@@ -24,6 +25,7 @@ public class TopMenu extends HBox {
 
         // Initialize dynamic nodes
         this.tcgApplication = tcgApplication;
+        this.mainScene = mainScene;
 
         // Shop name vbox
         Label shopNameOne = new Label("HY Trading Card Game");
@@ -117,29 +119,24 @@ public class TopMenu extends HBox {
         Button dropboxButton = new Button("≡");
 
         // Create MenuItems for the dropdown
-        MenuItem option1 = new MenuItem("Purchase History");
-        option1.setOnAction(_ -> System.out.println("Option 1 clicked"));
-        MenuItem option2 = new MenuItem("Reset Password");
-        option2.setOnAction(_ -> System.out.println("Option 2 clicked"));
-        ContextMenu contextMenu = new ContextMenu(option1, option2);
+        MenuItem option0 = new MenuItem("Main Menu    ");
+        option0.setOnAction(e -> {
+            mainScene.resetAll();
+            mainScene.getSettingPane().setVisible(false);
+            mainScene.getCartPane().setVisible(false);
+            mainScene.getShopPane().setVisible(true);
+        });
+        MenuItem option1 = new MenuItem("Settings");
+        option1.setOnAction(_ -> changePage());
+        MenuItem option2 = new MenuItem("Logout");
+        option2.setOnAction(_ -> tcgApplication.logout());
+        ContextMenu contextMenu = new ContextMenu(option0, option1, option2);
         contextMenu.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-weight: normal;" +
                 "-fx-font-size: 12;" +
                 "-fx-background-fill: #EEEEEE;"
         );
-
-        // If is admin add more option
-        if (isAdmin) {
-            MenuItem option3 = new MenuItem("Option 3");
-            option3.setOnAction(_ -> System.out.println("Option 3 clicked"));
-            contextMenu.getItems().add(option3);
-        }
-
-        // Logout option
-        MenuItem lastOption = new MenuItem("Logout");
-        lastOption.setOnAction(_ -> tcgApplication.logout());
-        contextMenu.getItems().add(lastOption);
 
         // Show the ContextMenu when the button is clicked
         dropboxButton.setOnAction(_ -> {
@@ -150,13 +147,20 @@ public class TopMenu extends HBox {
             contextMenu.hide();
 
             double xPos = window.getX() + dropboxButton.getLayoutX() + dropboxButton.getWidth() - menuWidth/1.3;
-            double yPos = window.getY() + dropboxButton.getLayoutY() + dropboxButton.getHeight()*2;
-
+            double yPos = window.getY() + dropboxButton.getLayoutY() + dropboxButton.getHeight()*2 - 10;
 
             contextMenu.show(dropboxButton, xPos, yPos);
         });
 
         return dropboxButton;
+    }
+
+
+    // Change page with a parameter input
+    public void changePage() {
+        mainScene.getShopPane().setVisible(false);
+        mainScene.getCartPane().setVisible(false);
+        mainScene.getSettingPane().setVisible(true);
     }
 
 

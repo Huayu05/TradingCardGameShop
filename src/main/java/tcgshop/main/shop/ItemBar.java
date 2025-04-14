@@ -61,7 +61,7 @@ public class ItemBar extends VBox {
 
         // Add message if the list was empty
         if (flowPane.getChildren().isEmpty()) {
-            Label nothingLabel = new Label("No Items Available now");
+            Label nothingLabel = new Label("   No Items Available now   ");
             nothingLabel.setStyle(
                     "-fx-font-weight: bold;" +
                     "-fx-font-size: 18;" +

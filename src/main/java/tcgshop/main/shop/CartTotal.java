@@ -213,6 +213,7 @@ public class CartTotal extends VBox {
         popupWindow(true);
 
         mainScene.getShopPane().setVisible(true);
+        mainScene.getSettingPane().setVisible(false);
         mainScene.getCartPane().setVisible(false);
         mainScene.getShopPane().clearItem();
         mainScene.resetAll();
