@@ -80,6 +80,12 @@ public class TCGApplication extends Application {
     }
 
 
+    // Getter method ( Password )
+    public String getPassword() {
+        return password;
+    }
+
+
     // Getter method ( Shop Scene )
     public MainScene getShopScene() {
         return mainScene;

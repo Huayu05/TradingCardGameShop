@@ -318,4 +318,54 @@ public class SQLConnector {
         }
         return returnList;
     }
+
+
+    // Method change password
+    public boolean changePassword(String username, String password) {
+        // Check connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return false;
+        }
+
+        String query = "UPDATE users SET `Password` = ? WHERE `UserID` = (SELECT UserID FROM users WHERE userName = ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, password);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Password change failed.");
+            return false;
+        }
+    }
+
+
+    // Fill in feedback
+    public boolean addFeedback(String feedback, String username) {
+        // Check text len
+        if (feedback.length() < 10) {
+            return false;
+        }
+
+        // Check connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return false;
+        }
+
+        String query = "INSERT INTO feedbacks(`FeedbackText`, `UserID`, `FeedbackTime`) VALUES (?, (SELECT UserID FROM users WHERE userName = ?), NOW())";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, feedback);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Feedback add failed.");
+            return false;
+        }
+    }
 }

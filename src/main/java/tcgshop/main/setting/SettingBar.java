@@ -80,7 +80,10 @@ public class SettingBar extends VBox {
                 base.getChildren().add(new HistorySetting(tcgApplication));
                 break;
             case 1:
-                System.out.println("Temp");
+                base.getChildren().add(new PasswordSetting(tcgApplication));
+                break;
+            case 2:
+                base.getChildren().add(new FeedbackSetting(tcgApplication));
                 break;
             default:
                 break;
