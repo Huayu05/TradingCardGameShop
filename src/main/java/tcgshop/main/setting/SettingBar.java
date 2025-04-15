@@ -10,11 +10,15 @@ import tcgshop.TCGApplication;
 
 public class SettingBar extends VBox {
     // Dynamic nodes
+    private TCGApplication tcgApplication;
     private StackPane base;
 
     public SettingBar(TCGApplication tcgApplication) {
         // Call constructor from parent
         super();
+
+        // Dynamic setup
+        this.tcgApplication = tcgApplication;
 
         // Shadow config
         InnerShadow innerShadow = new InnerShadow();
@@ -73,7 +77,7 @@ public class SettingBar extends VBox {
         base.getChildren().clear();
         switch (index) {
             case 0:
-                base.getChildren().add(new HistorySetting());
+                base.getChildren().add(new HistorySetting(tcgApplication));
                 break;
             case 1:
                 System.out.println("Temp");

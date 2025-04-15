@@ -251,4 +251,71 @@ public class SQLConnector {
             System.out.println(e.getMessage());
         }
     }
+
+
+    // Get bill details [ [ BillInfo<>, Item1<>, ... ItemN<> ], [..], .. ]
+    public ArrayList<ArrayList<ArrayList<Object>>> getBill(String username) {
+        // Check connection
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return null;
+        }
+
+        ArrayList<ArrayList<ArrayList<Object>>> returnList = new ArrayList<>();
+        ArrayList<Integer> billList = new ArrayList<>();
+
+        // Query preparation ( Get bill for a user )
+        String query1 = "SELECT * FROM bills WHERE UserID = (SELECT UserID FROM users WHERE userName = ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query1)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                billList.add(rs.getInt("BillID"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Bill getter failed.");
+        }
+
+        // Query preparation ( Get Items in bill )
+        for (Integer billID : billList) {
+            ArrayList<ArrayList<Object>> bills = new ArrayList<>();
+
+            String query2 = "SELECT * FROM bills WHERE BillID = ?";
+            String query3 = "SELECT i.ItemName, s.ItemPrice, s.ItemCount FROM sells s JOIN items i ON s.ItemID=i.ItemID WHERE s.BillID = ?";
+
+            ArrayList<Object> billDetails = new ArrayList<>();
+            try (PreparedStatement stmt = conn.prepareStatement(query2)) {
+                stmt.setInt(1, billID);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                billDetails.add(rs.getTimestamp("BillDate"));
+                billDetails.add(rs.getInt("DiscountPercent"));
+                billDetails.add(rs.getInt("TaxPercent"));
+                bills.add(billDetails);
+            }
+            catch (Exception e) {
+                System.out.println(" ERROR: Bill date getter failed.");
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(query3)) {
+                stmt.setInt(1, billID);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    ArrayList<Object> itemList = new ArrayList<>();
+                    itemList.add(rs.getString("ItemName"));
+                    itemList.add(rs.getInt("ItemCount"));
+                    itemList.add(rs.getDouble("ItemPrice"));
+                    bills.add(itemList);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(" ERROR: Item getter failed.");
+            }
+
+            returnList.add(bills);
+        }
+        return returnList;
+    }
 }
