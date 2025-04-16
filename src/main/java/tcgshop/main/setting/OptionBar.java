@@ -39,7 +39,7 @@ public class OptionBar extends VBox {
         );
 
         if (tcgApplication.isAdmin()) {
-            optionList.addAll("Add Items", "Edit Items", "Sales Overview", "Admin Authorize", "Show Feedback");
+            optionList.addAll("Manage Item", "Sales Overview", "Manage Account", "Show Feedback");
         }
 
 

@@ -13,7 +13,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import tcgshop.utils.GeneralFunction;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ItemBox extends VBox {
     // Item information
@@ -46,7 +48,15 @@ public class ItemBox extends VBox {
         noStockView.setFitWidth(100);
 
         // Item picture
-        Image image = new Image("file:src/main/resources/tcgshop/images/items/" + item.get(1) + ".png");
+        String imagePath = null;
+        File dir = new File(System.getProperty("user.dir")+"\\item_pictures\\");
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
+            if (file.getName().contains(item.get(1).toString())) {
+                File path = new File(dir, file.getName());
+                imagePath = path.getAbsolutePath();
+            }
+        }
+        Image image = new Image(Objects.requireNonNullElse(imagePath, "file:src/main/resources/tcgshop/images/no_image.png"));
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(120);
         imageView.setFitHeight(160);

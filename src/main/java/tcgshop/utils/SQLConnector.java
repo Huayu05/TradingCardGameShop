@@ -368,4 +368,72 @@ public class SQLConnector {
             return false;
         }
     }
+
+
+    // Edit items detail for admin
+    public boolean editItem(String name, String priceStr, String countStr, ArrayList<Object> item) {
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return false;
+        }
+
+        double price;
+        int count;
+
+        if (name.length() > 20 || name.isEmpty()) {
+            return false;
+        }
+        try {
+            price = Double.parseDouble(priceStr);
+            if (price > 10000) {
+                return false;
+            }
+
+            count = Integer.parseInt(countStr);
+            if (count > 1000) {
+                return false;
+            }
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+        if (name.equals(item.get(1).toString()) && GeneralFunction.twoDecimalPlaces(price).equals(item.get(2).toString()) && count == (Integer) item.get(3)) {
+            return false;
+        }
+
+
+        String query = "UPDATE items SET `ItemName` = ?, `ItemPrice` = ?, `ItemLeft` = ? WHERE `ItemID` = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, name);
+            stmt.setDouble(2, price);
+            stmt.setInt(3, count);
+            stmt.setInt(4, (Integer) item.getFirst());
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item edit failed.");
+            return false;
+        }
+    }
+
+
+    // Delete selected item from db
+    public void deleteItem(int itemID) {
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return;
+        }
+
+        String query = "DELETE FROM items WHERE `ItemID` = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, itemID);
+            stmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item delete failed.");
+        }
+    }
 }
