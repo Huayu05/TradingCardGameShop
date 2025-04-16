@@ -427,6 +427,7 @@ public class SQLConnector {
             return;
         }
 
+
         String query = "DELETE FROM items WHERE `ItemID` = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, itemID);
@@ -435,5 +436,106 @@ public class SQLConnector {
         catch (Exception e) {
             System.out.println(" ERROR: Item delete failed.");
         }
+    }
+
+
+    // Method to add new item
+    public boolean addItem(String name, String priceStr, String countStr, String category) {
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return false;
+        }
+
+        double price;
+        int count;
+
+        if (name.length() > 20 || name.isEmpty()) {
+            return false;
+        }
+        try {
+            price = Double.parseDouble(priceStr);
+            if (price > 10000) {
+                return false;
+            }
+
+            count = Integer.parseInt(countStr);
+            if (count > 1000) {
+                return false;
+            }
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item add failed.");
+            return false;
+        }
+
+        ArrayList<Object> catList = new ArrayList<>();
+        for (String exist : getCategory()) {
+            catList.add(exist.trim().toLowerCase().replaceAll("\\s+", ""));
+        }
+        if (!catList.contains(category.trim().replaceAll("\\s+", "").toLowerCase())) {
+            String query1 = "INSERT INTO categories (`CategoryName`) VALUES (?)";
+            try (PreparedStatement stmt1 = conn.prepareStatement(query1)) {
+                stmt1.setString(1, category);
+                stmt1.executeUpdate();
+            } catch (Exception e) {
+                System.out.println(" ERROR: Category add failed.");
+                return false;
+            }
+        }
+        else {
+            for (String exist : getCategory()) {
+                if (exist.trim().replaceAll("\\s+", "").equalsIgnoreCase(category.trim().replaceAll("\\s+", ""))) {
+                    category = exist;
+                }
+            }
+        }
+
+
+        String query2 = "INSERT INTO items (`ItemName`, `ItemPrice`, `ItemLeft`, `CategoryID`) VALUES (?, ?, ?, (SELECT CategoryID FROM categories WHERE CategoryName = ?))";
+        try (PreparedStatement stmt2 = conn.prepareStatement(query2)) {
+            stmt2.setString(1, name);
+            stmt2.setDouble(2, price);
+            stmt2.setInt(3, count);
+            stmt2.setString(4, category);
+            stmt2.executeUpdate();
+            return true;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item add failed.");
+            return false;
+        }
+    }
+
+
+    // Method change category name
+    public void deleteCategory(String oldCategory, String newCategory) {
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return;
+        }
+
+        String query;
+        if (newCategory.isEmpty()) {
+            query = "DELETE FROM categories WHERE `CategoryName` = ?";
+        }
+        else {
+            query = "UPDATE categories SET `CategoryName` = ? WHERE `CategoryName` = ?";
+        }
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            if (!newCategory.isEmpty()) {
+                stmt.setString(1, newCategory);
+                stmt.setString(2, oldCategory);
+            }
+            else {
+                stmt.setString(1, oldCategory);
+            }
+            stmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(" ERROR: Category change failed.");
+        }
+
     }
 }

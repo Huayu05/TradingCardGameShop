@@ -99,4 +99,13 @@ public class GeneralFunction {
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(d);
     }
+
+
+    // Return capital
+    public static String toCapital(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
 }
