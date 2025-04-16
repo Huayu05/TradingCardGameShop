@@ -1,6 +1,7 @@
 package tcgshop.main.setting;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -23,6 +24,10 @@ public class FeedbackShow extends VBox {
                 feedbackBox.prefWidthProperty().bind(allFeedback.widthProperty());
                 allFeedback.getChildren().add(feedbackBox);
             }
+        }
+        else {
+            Label noFeedbackLabel = new Label("No Feedback Available Now");
+            allFeedback.getChildren().add(noFeedbackLabel);
         }
 
         Region spacer = new Region();

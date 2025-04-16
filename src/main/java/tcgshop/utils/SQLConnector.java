@@ -566,4 +566,39 @@ public class SQLConnector {
             return feedbacks;
         }
     }
+
+
+    // Method get all user separate by usertype
+    public ArrayList<ArrayList<String>> getAllUser() {
+        ArrayList<ArrayList<String>> accList = new ArrayList<>();
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return accList;
+        }
+
+        String query1 = "SELECT * FROM users WHERE `IsAdmin` = 0";
+        String query2 = "SELECT * FROM users WHERE `IsAdmin` = 1";
+
+        try {
+            Statement stmt1 = conn.createStatement();
+            ResultSet rs1 = stmt1.executeQuery(query1);
+            ArrayList<String> users = new ArrayList<>();
+            while (rs1.next()) {
+                users.add(rs1.getString("Username"));
+            }
+            accList.add(users);
+            Statement stmt2 = conn.createStatement();
+            ResultSet rs2 = stmt2.executeQuery(query2);
+            ArrayList<String> admins = new ArrayList<>();
+            while (rs2.next()) {
+                admins.add(rs2.getString("Username"));
+            }
+            accList.add(admins);
+            return accList;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: User query failed.");
+            return accList;
+        }
+    }
 }
