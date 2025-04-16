@@ -33,6 +33,16 @@ public class AccountSetting extends HBox {
         VBox userVBox = new VBox(10, userListView, setAdmin);
         userVBox.setAlignment(Pos.CENTER_RIGHT);
 
+        setUser.setOnAction(e -> {
+            tcgApplication.getSQLConnector().changeUserType(false, adminListView.getSelectionModel().getSelectedItem());
+            tcgApplication.getShopScene().getSettingPane().getSettingBar().settingChosen(5);
+        });
+
+        setAdmin.setOnAction(e -> {
+            tcgApplication.getSQLConnector().changeUserType(true, userListView.getSelectionModel().getSelectedItem());
+            tcgApplication.getShopScene().getSettingPane().getSettingBar().settingChosen(5);
+        });
+
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(userVBox, adminVBox);

@@ -576,8 +576,8 @@ public class SQLConnector {
             return accList;
         }
 
-        String query1 = "SELECT * FROM users WHERE `IsAdmin` = 0";
-        String query2 = "SELECT * FROM users WHERE `IsAdmin` = 1";
+        String query1 = "SELECT * FROM users WHERE `IsAdmin` = 0 AND `UserID` > 1";
+        String query2 = "SELECT * FROM users WHERE `IsAdmin` = 1 AND `UserID` > 1";
 
         try {
             Statement stmt1 = conn.createStatement();
@@ -599,6 +599,26 @@ public class SQLConnector {
         catch (Exception e) {
             System.out.println(" ERROR: User query failed.");
             return accList;
+        }
+    }
+
+
+    // Method change user type
+    public void changeUserType(boolean isAdmin, String username) {
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return;
+        }
+
+        String query = "UPDATE users SET `IsAdmin` = ? WHERE `UserID` = (SELECT `UserID` FROM users WHERE `Username` = ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, isAdmin ? 1 : 0);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(" ERROR: User change failed.");
         }
     }
 }
