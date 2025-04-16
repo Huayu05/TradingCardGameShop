@@ -536,6 +536,34 @@ public class SQLConnector {
             System.out.println(e.getMessage());
             System.out.println(" ERROR: Category change failed.");
         }
+    }
 
+
+    // Method get feedback
+    public ArrayList<ArrayList<Object>> getFeedback() {
+        ArrayList<ArrayList<Object>> feedbacks = new ArrayList<>();
+
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return feedbacks;
+        }
+
+        String query = "SELECT * FROM feedbacks JOIN users ON users.`UserID` = feedbacks.`UserID`";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ArrayList<Object> feedback = new ArrayList<>();
+                feedback.add(rs.getString("FeedbackText"));
+                feedback.add(rs.getString("Username"));
+                feedback.add(rs.getTimestamp("FeedbackTime"));
+                feedbacks.add(feedback);
+            }
+            return feedbacks;
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Feedback query failed.");
+            return feedbacks;
+        }
     }
 }

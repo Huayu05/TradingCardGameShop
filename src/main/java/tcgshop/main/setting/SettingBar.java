@@ -88,6 +88,15 @@ public class SettingBar extends VBox {
             case 3:
                 base.getChildren().add(new ItemSetting(tcgApplication));
                 break;
+            case 4:
+                base.getChildren().add(new SalesSetting(tcgApplication));
+                break;
+            case 5:
+                base.getChildren().add(new AccountSetting(tcgApplication));
+                break;
+            case 6:
+                base.getChildren().add(new FeedbackShow(tcgApplication));
+                break;
             default:
                 break;
         }
