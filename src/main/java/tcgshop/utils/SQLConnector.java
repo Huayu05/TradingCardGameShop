@@ -621,4 +621,32 @@ public class SQLConnector {
             System.out.println(" ERROR: User change failed.");
         }
     }
+
+
+    public ArrayList<ArrayList<Object>> getItemSales() {
+        ArrayList<ArrayList<Object>> itemSales = new ArrayList<>();
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return itemSales;
+        }
+
+        String query = "SELECT i.ItemName, COALESCE(SUM(s.ItemCount), 0) AS ItemCount  FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID GROUP BY i.ItemID ORDER BY i.ItemName;";
+
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                ArrayList<Object> item = new ArrayList<>();
+                item.add(rs.getString("ItemName"));
+                item.add(rs.getInt("ItemCount"));
+                itemSales.add(item);
+            }
+            return itemSales;
+
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item query failed.");
+            return itemSales;
+        }
+    }
 }
