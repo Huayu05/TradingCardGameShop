@@ -71,7 +71,7 @@ public class SQLConnector {
         }
 
         // MySQL query setup
-        String query = "INSERT INTO users(`Username`, `Password`, `IsAdmin`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users(`Username`, `Password`, `IsAdmin`, `RegisterDate`) VALUES (?, ?, ?, NOW())";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -623,22 +623,24 @@ public class SQLConnector {
     }
 
 
-    public ArrayList<ArrayList<Object>> getItemSales() {
+    public ArrayList<ArrayList<Object>> getItemSales(String category) {
         ArrayList<ArrayList<Object>> itemSales = new ArrayList<>();
         if (conn == null) {
             System.out.println(" ERROR: No MySQL connection available.");
             return itemSales;
         }
 
-        String query = "SELECT i.ItemName, COALESCE(SUM(s.ItemCount), 0) AS ItemCount  FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID GROUP BY i.ItemID ORDER BY i.ItemName;";
+        String query = "SELECT i.ItemName, COALESCE(SUM(s.ItemCount), 0) AS ItemCount, COALESCE(SUM(s.ItemCount * s.ItemPrice), 0) AS TotalSales, c.CategoryName FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID LEFT JOIN categories c ON i.CategoryID=c.CategoryID WHERE (? = 'All' OR c.CategoryName = ?) GROUP BY i.ItemID ORDER BY i.ItemName;";
 
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, category);
+            stmt.setString(2, category);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 ArrayList<Object> item = new ArrayList<>();
                 item.add(rs.getString("ItemName"));
                 item.add(rs.getInt("ItemCount"));
+                item.add(rs.getDouble("TotalSales"));
                 itemSales.add(item);
             }
             return itemSales;
@@ -647,6 +649,58 @@ public class SQLConnector {
         catch (Exception e) {
             System.out.println(" ERROR: Item query failed.");
             return itemSales;
+        }
+    }
+
+    public ArrayList<ArrayList<Object>> getCategorySales() {
+        ArrayList<ArrayList<Object>> itemSales = new ArrayList<>();
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return itemSales;
+        }
+
+        String query = "SELECT  c.CategoryName, COALESCE(SUM(s.ItemCount), 0) AS TotalCount FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID LEFT JOIN categories c ON i.CategoryID=c.CategoryID GROUP BY c.CategoryID ORDER BY i.ItemName;";
+
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                ArrayList<Object> item = new ArrayList<>();
+                item.add(rs.getString("CategoryName"));
+                item.add(rs.getInt("TotalCount"));
+                itemSales.add(item);
+            }
+            return itemSales;
+
+        }
+        catch (Exception e) {
+            System.out.println(" ERROR: Item query failed.");
+            return itemSales;
+        }
+    }
+
+    public ArrayList<ArrayList<Object>> getUserDate() {
+        ArrayList<ArrayList<Object>> date = new ArrayList<>();
+        if (conn == null) {
+            System.out.println(" ERROR: No MySQL connection available.");
+            return date;
+        }
+
+        String query = "SELECT `RegisterDate`, COUNT(*) AS Count FROM users GROUP BY `RegisterDate`;";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                ArrayList<Object> list = new ArrayList<>();
+                list.add(rs.getDate("RegisterDate").toString());
+                list.add(rs.getInt("Count"));
+                date.add(list);
+            }
+            return date;
+        } catch (Exception e) {
+            System.out.println(" ERROR: User query failed.");
+            System.out.println(e.getMessage());
+            return date;
         }
     }
 }
