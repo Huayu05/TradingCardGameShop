@@ -5,12 +5,14 @@ import javafx.animation.PauseTransition;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.ArrayList;
 
 public class GeneralFunction {
     // Fade in transition for a GridPane
@@ -39,59 +41,128 @@ public class GeneralFunction {
     // Method return tax in %
     public static int loadTax() {
         int tax = 0;
+        File file = new File(System.getProperty("user.dir")+"\\data\\data.txt");
+
+        if (!file.exists()) {
+            System.out.println("ERROR: data.txt not found");
+            return tax;
+        }
+
         try {
-            var resource = (GeneralFunction.class.getResource("/tcgshop/data.txt"));
-            if (resource != null) {
-                List<String> lines = Files.readAllLines(Paths.get(resource.toURI()));
-                for (String line : lines) {
-                    if (line.startsWith("Tax")) {
-                        String[] parts = line.split("=");
-                        if (parts.length == 2) {
-                            tax = Integer.parseInt(parts[1].trim());
-                            break;
-                        }
+            List<String> lines = Files.readAllLines(file.toPath());
+            for (String line : lines) {
+                if (line.startsWith("Tax")) {
+                    String[] parts = line.split("=");
+                    if (parts.length == 2) {
+                        tax = Integer.parseInt(parts[1].trim());
+                        break;
                     }
                 }
             }
         }
         catch (IOException e) {
-            System.out.println("ERROR: Cannot get tax");
-        }
-        catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            System.out.println("ERROR: Cannot read tax file");
+            e.printStackTrace();
         }
 
         return tax;
     }
 
 
-    // Method return discount in %
-    public static <Path> int loadDiscount() {
-        int discount = 0;
+    public static void saveTax(int tax) {
+        File file = new File(System.getProperty("user.dir")+"\\data\\data.txt"); // same path as loadTax()
+        List<String> lines = new ArrayList<>();
+
         try {
-            var resource = (GeneralFunction.class.getResource("/tcgshop/data.txt"));
-            if (resource != null) {
-                List<String> lines = Files.readAllLines(Paths.get(resource.toURI()));
-                for (String line : lines) {
-                    if (line.startsWith("Discount")) {
-                        String[] parts = line.split("=");
-                        if (parts.length == 2) {
-                            discount = Integer.parseInt(parts[1].trim());
-                            break;
-                        }
+            if (file.exists()) {
+                lines = Files.readAllLines(file.toPath());
+
+                boolean found = false;
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).startsWith("Tax")) {
+                        lines.set(i, "Tax = " + tax);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    lines.add("Tax = " + tax);
+                }
+            } else {
+                lines.add("Tax = " + tax);
+            }
+
+            Files.write(file.toPath(), lines);
+
+        }
+        catch (IOException e) {
+            System.out.println("ERROR: Cannot save tax");
+        }
+    }
+
+
+    // Method return discount in %
+    public static int loadDiscount() {
+        int discount = 0;
+        File file = new File(System.getProperty("user.dir")+"\\data\\data.txt");
+
+        if (!file.exists()) {
+            System.out.println("ERROR: data.txt not found");
+            return discount;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(file.toPath());
+            for (String line : lines) {
+                if (line.startsWith("Discount")) {
+                    String[] parts = line.split("=");
+                    if (parts.length == 2) {
+                        discount = Integer.parseInt(parts[1].trim());
+                        break;
                     }
                 }
             }
         }
         catch (IOException e) {
-            System.out.println("ERROR: Cannot get discount");
-        }
-        catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            System.out.println("ERROR: Cannot read discount file");
+            e.printStackTrace();
         }
 
         return discount;
     }
+
+
+    public static void saveDiscount(int discount) {
+        File file = new File(System.getProperty("user.dir")+"\\data\\data.txt");
+        List<String> lines = new ArrayList<>();
+
+        try {
+            if (file.exists()) {
+                lines = Files.readAllLines(file.toPath());
+
+                boolean found = false;
+                for (int i = 0; i < lines.size(); i++) {
+                    if (lines.get(i).startsWith("Discount")) {
+                        lines.set(i, "Discount = " + discount);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    lines.add("Discount = " + discount);
+                }
+            } else {
+                lines.add("Discount = " + discount);
+            }
+
+            Files.write(file.toPath(), lines);
+
+        }
+        catch (IOException e) {
+            System.out.println("ERROR: Cannot save discount");
+        }
+    }
+
 
 
     // Two decimal converter
