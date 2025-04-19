@@ -659,7 +659,7 @@ public class SQLConnector {
             return itemSales;
         }
 
-        String query = "SELECT  c.CategoryName, COALESCE(SUM(s.ItemCount), 0) AS TotalCount FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID LEFT JOIN categories c ON i.CategoryID=c.CategoryID GROUP BY c.CategoryID ORDER BY i.ItemName;";
+        String query = "SELECT  c.CategoryName, COALESCE(SUM(s.ItemCount), 0) AS TotalCount, COALESCE(SUM(s.ItemCount * s.ItemPrice), 0) AS TotalSales FROM items i LEFT JOIN sells s ON s.ItemID = i.ItemID LEFT JOIN categories c ON i.CategoryID=c.CategoryID GROUP BY c.CategoryID ORDER BY i.ItemName;";
 
         try {
             Statement stmt = conn.createStatement();
@@ -668,13 +668,14 @@ public class SQLConnector {
                 ArrayList<Object> item = new ArrayList<>();
                 item.add(rs.getString("CategoryName"));
                 item.add(rs.getInt("TotalCount"));
+                item.add(rs.getDouble("TotalSales"));
                 itemSales.add(item);
             }
             return itemSales;
 
         }
         catch (Exception e) {
-            System.out.println(" ERROR: Item query failed.");
+            System.out.println(" ERROR: Category query failed.");
             return itemSales;
         }
     }

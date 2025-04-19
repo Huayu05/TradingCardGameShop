@@ -12,6 +12,9 @@ import javafx.scene.shape.Rectangle;
 import tcgshop.main.MainScene;
 import tcgshop.utils.GeneralFunction;
 
+import java.io.File;
+import java.util.Objects;
+
 public class CartItem extends HBox {
     // Items information
     private int itemChosen;
@@ -31,8 +34,15 @@ public class CartItem extends HBox {
         int itemLeft = itemBox.getItemLeft();
 
         // Item picture
-        Image image = new Image("file:src/main/resources/tcgshop/images/items/" + itemName + ".png");
-        ImageView imageView = new ImageView(image);
+        String imagePath = null;
+        File dir = new File(System.getProperty("user.dir")+"\\item_pictures\\");
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
+            if (file.getName().contains(itemBox.getItemName())) {
+                File path = new File(dir, file.getName());
+                imagePath = path.getAbsolutePath();
+            }
+        }
+        Image image = new Image(Objects.requireNonNullElse(imagePath, "file:src/main/resources/tcgshop/images/no_image.png"));        ImageView imageView = new ImageView(image);
         imageView.setFitWidth(60);
         imageView.setFitHeight(80);
         Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
