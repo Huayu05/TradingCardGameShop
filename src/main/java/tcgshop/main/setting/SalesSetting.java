@@ -2,6 +2,8 @@ package tcgshop.main.setting;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.chart.*;
@@ -11,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import tcgshop.TCGApplication;
+import tcgshop.utils.GeneralFunction;
 
 import java.util.ArrayList;
 
@@ -18,7 +21,6 @@ public class SalesSetting extends VBox {
     // Dynamic nodes
     private TCGApplication tcgApplication;
     private StackPane showPane;
-    private HBox optionBar;
     private HBox topBar;
     private ComboBox<String> comboBox1 = null;
     private ComboBox<String> comboBox2 = null;
@@ -46,6 +48,7 @@ public class SalesSetting extends VBox {
         Separator separator3 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator3, Priority.ALWAYS);
         Label option4 = new Label("All Sales Details");
+        option4.setOnMouseClicked(e -> setSalesDetails(true));
         Separator separator4 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator4, Priority.ALWAYS);
         Label option5 = new Label("User Amount");
@@ -53,7 +56,7 @@ public class SalesSetting extends VBox {
         Separator separator5 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator5, Priority.ALWAYS);
 
-        optionBar = new HBox(10, option0, separator0, option1, separator1, option2, separator2, option3, separator3, option4, separator4, option5, separator5);
+        HBox optionBar = new HBox(10, option0, separator0, option1, separator1, option2, separator2, option3, separator3, option4, separator4, option5, separator5);
         ScrollPane scrollPane = new ScrollPane(optionBar);
         scrollPane.setStyle("-fx-background-color: #FFFFFF;");
 
@@ -146,11 +149,35 @@ public class SalesSetting extends VBox {
         comboBox1 = null;
         comboBox2 = null;
 
+        if (comboBox3 == null) {
+            comboBox3 = new ComboBox<>();
+            comboBox3.setMinWidth(100);
+            comboBox3.getItems().addAll("By Item", "By Category");
+            comboBox3.setValue("By Item");
+            comboBox3.setOnAction(_ -> setSalesDetails(comboBox3.getValue().equals("By Item")));
+            topBar.getChildren().add(comboBox3);
+        }
+
         TableView<SalesDetails> tableView = new TableView<>();
         TableColumn<SalesDetails, String> nameCol = new TableColumn<>(isItem ? "Item Name" : "Category");
         nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         TableColumn<SalesDetails, Integer> countCol = new TableColumn<>("Count");
-        countCol.setCellValueFactory(data -> SimpleIntegerProperty(data.getValue().getAmount()).asObject());
+        countCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAmount()).asObject());
+        TableColumn<SalesDetails, String> priceCol = new TableColumn<>("Price (RM)");
+        priceCol.setCellValueFactory(data -> new SimpleStringProperty(GeneralFunction.twoDecimalPlaces(data.getValue().getPrice())));
+
+        ObservableList<SalesDetails> items = FXCollections.observableArrayList();
+        ArrayList<ArrayList<Object>> data = isItem ? tcgApplication.getSQLConnector().getItemSales("All") : tcgApplication.getSQLConnector().getCategorySales();
+        for (ArrayList<Object> item : data) {
+            SalesDetails salesDetails = new SalesDetails(item.getFirst().toString(), (Integer) item.get(1), (Double) item.get(2));
+            items.add(salesDetails);
+        }
+        tableView.setItems(items);
+        tableView.getColumns().addAll(nameCol, countCol, priceCol);
+        tableView.getColumns().forEach(col -> col.setReorderable(false));
+
+        showPane.getChildren().clear();
+        showPane.getChildren().add(tableView);
     }
 
     public void setUserAmount() {
