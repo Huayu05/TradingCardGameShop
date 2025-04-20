@@ -30,7 +30,7 @@ public class MovingPane extends VBox {
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 28;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #000000D0;" +
+                "-fx-text-fill: #EEEEEE;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
 
@@ -40,7 +40,7 @@ public class MovingPane extends VBox {
         subtitle.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 16;" +
-                "-fx-text-fill: #000000D0;" +
+                "-fx-text-fill: #EEEEEE;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
 
@@ -51,21 +51,43 @@ public class MovingPane extends VBox {
         changeSide.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 16;" +
-                "-fx-background-color: linear-gradient(to bottom, #3d8d7a, #3D8D7AB8);" +
-                "-fx-text-fill: white;" +
+                "-fx-background-color: linear-gradient(to bottom, #00ADB5, #00ADB5B8);" +
+                "-fx-text-fill: #FFFFFF;" +
                 "-fx-font-weight: bold;" +
                 "-fx-padding: 10px 20px;" +
                 "-fx-background-radius: 25px;" +
                 "-fx-border-radius: 25px;" +
                 "-fx-effect: dropshadow(gaussian, #0000009F, 20, 0.5, 0, 0);"
         );
+        changeSide.setOnMouseEntered(_ -> changeSide.setStyle(
+                "-fx-font-family: Verdana;" +
+                        "-fx-font-size: 16;" +
+                        "-fx-background-color: linear-gradient(to bottom, #00ADB5AF, #00ADB55f);" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 10px 20px;" +
+                        "-fx-background-radius: 25px;" +
+                        "-fx-border-radius: 25px;" +
+                        "-fx-effect: dropshadow(gaussian, #0000006F, 20, 0.5, 0, 0);"
+        ));
+        changeSide.setOnMouseExited(_ -> changeSide.setStyle(
+                "-fx-font-family: Verdana;" +
+                        "-fx-font-size: 16;" +
+                        "-fx-background-color: linear-gradient(to bottom, #00ADB5, #00ADB5B8);" +
+                        "-fx-text-fill: #FFFFFF;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 10px 20px;" +
+                        "-fx-background-radius: 25px;" +
+                        "-fx-border-radius: 25px;" +
+                        "-fx-effect: dropshadow(gaussian, #0000009F, 20, 0.5, 0, 0);"
+        ));
 
         // Moving VBox config
         this.getChildren().addAll(title, subtitle, changeSide);
         this.setPadding(new Insets(100, 0, 100, 0));
         this.setAlignment(Pos.CENTER);
         this.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, #B3D8A8, #d0efc8);" +
+                "-fx-background-color: #393E46;" +
                 "-fx-background-radius: 20px;" +
                 "-fx-effect: dropshadow(gaussian, #0000007F, 10, 0.3, 0, 0);"
         );
@@ -104,7 +126,7 @@ public class MovingPane extends VBox {
         // Parallel start all transition
         ParallelTransition parallelTransition = new ParallelTransition(
             fadeTextChange(title, nowLeft ? "Welcome Back" : "Welcome Aboard"),
-            fadeTextChange(subtitle, nowLeft ? "Have an account already?" : "Doesn't have an account?"),
+            fadeTextChange(subtitle, nowLeft ? "Have an account already?" : "Don't have an account?"),
             fadeTextChange(changeSide, nowLeft ? "Log In" : "Sign Up")
         );
         parallelTransition.play();

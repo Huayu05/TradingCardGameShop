@@ -38,22 +38,22 @@ public class LogInPane extends GridPane {
         };
 
         // Topic label
-        Label title = new Label("Log In Account");
+        Label title = new Label("Account Login");
         title.setStyle(
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 34;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #4A3B2F;" +
+                "-fx-text-fill: #393E46;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
         VBox.setMargin(title, new Insets(0, 0, 10, 0));
 
         // Subtitle label
-        Label subtitle = new Label("Welcome back and continue your journey here!");
+        Label subtitle = new Label("Welcome back! Continue your journey here.");
         subtitle.setStyle(
                 "-fx-font-family: Verdana;" +
-                "-fx-font-size: 12;" +
-                "-fx-text-fill: #4A3B2F;" +
+                "-fx-font-size: 16;" +
+                "-fx-text-fill: #393E46;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
         VBox.setMargin(subtitle, new Insets(0, 0, 25, 0));
@@ -78,8 +78,28 @@ public class LogInPane extends GridPane {
         logInButton.setOnAction(_ -> logIn(tcgApplication));
         logInButton.setStyle(
                 "-fx-font-size: 12px;" +
-                "-fx-background-radius: 5px;"
+                        "-fx-font-weight: bold;" +
+                "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46;" +
+                "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0, 1, 1);"
         );
+        logInButton.setOnMouseEntered(_ -> logInButton.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46BF;" +
+                        "-fx-effect: dropshadow(gaussian, #0000004F, 6, 0, 1, 1);"
+        ));
+        logInButton.setOnMouseExited(_ -> logInButton.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46;" +
+                        "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0, 1, 1);"
+        ));
         VBox.setMargin(logInButton, new Insets(0, 0, 5, 0));
 
         // Respond label for button click
@@ -124,7 +144,7 @@ public class LogInPane extends GridPane {
     public void logIn(TCGApplication tcgApplication) {
         String[] data = new String[]{username.getText(), password.getText()};
         if (data[0].isEmpty() || data[1].isEmpty()) {
-            errorRespond.setText("Please fill all information!");
+            errorRespond.setText("Please fill in all the information!");
         } else {
             int userType = tcgApplication.getSQLConnector().login(data[0], data[1]);
             if (userType != -1) {

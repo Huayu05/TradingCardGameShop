@@ -265,7 +265,7 @@ public class SQLConnector {
         ArrayList<Integer> billList = new ArrayList<>();
 
         // Query preparation ( Get bill for a user )
-        String query1 = "SELECT * FROM bills WHERE UserID = (SELECT UserID FROM users WHERE userName = ?)";
+        String query1 = "SELECT * FROM bills WHERE UserID = (SELECT UserID FROM users WHERE userName = ?) ORDER BY BillDate DESC";
 
         try (PreparedStatement stmt = conn.prepareStatement(query1)) {
             stmt.setString(1, username);

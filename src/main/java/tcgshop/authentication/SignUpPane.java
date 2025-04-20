@@ -21,6 +21,7 @@ public class SignUpPane extends GridPane {
     // Dynamic nodes
     private TextField username;
     private PasswordField password;
+    private PasswordField confirmPassword;
     private Label errorRespond;
 
     // Constructor
@@ -43,17 +44,17 @@ public class SignUpPane extends GridPane {
                 "-fx-font-family: Verdana;" +
                 "-fx-font-size: 34;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #4A3B2F;" +
+                "-fx-text-fill: #393E46;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );
         VBox.setMargin(title, new Insets(0, 0, 10, 0));
 
         // Subtitle label
-        Label subtitle = new Label("Let's begin to start your journey at here!");
+        Label subtitle = new Label("Let's get started! Your journey begins here!");
         subtitle.setStyle(
                 "-fx-font-family: Verdana;" +
-                "-fx-font-size: 12;" +
-                "-fx-text-fill: #4A3B2F;" +
+                "-fx-font-size: 16;" +
+                "-fx-text-fill: #393E46;" +
                 "-fx-effect: dropshadow(gaussian, #0000004F, 3, 0, 1, 1)"
         );        
         VBox.setMargin(subtitle, new Insets(0, 0, 25, 0));
@@ -70,15 +71,42 @@ public class SignUpPane extends GridPane {
         password.setPromptText("Password");
         password.setMaxWidth(200);
         password.setTextFormatter(new TextFormatter<>(filter));
-        VBox.setMargin(password, new Insets(0, 0, 25, 0));
+        VBox.setMargin(password, new Insets(0, 0, 10, 0));
+
+        // Password confirmation input password field
+        confirmPassword = new PasswordField();
+        confirmPassword.setPromptText("Confirm Password");
+        confirmPassword.setMaxWidth(200);
+        confirmPassword.setTextFormatter(new TextFormatter<>(filter));
+        VBox.setMargin(confirmPassword, new Insets(0, 0, 25, 0));
 
         // Submit button for sign up
         Button signUpButton = new Button("Sign Up");
         signUpButton.setMinWidth(100);
         signUpButton.setStyle(
                 "-fx-font-size: 12px;" +
-                "-fx-background-radius: 5px;"
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46;" +
+                        "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0, 1, 1);"
         );
+        signUpButton.setOnMouseEntered(_ -> signUpButton.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46BF;" +
+                        "-fx-effect: dropshadow(gaussian, #0000004F, 6, 0, 1, 1);"
+        ));
+        signUpButton.setOnMouseExited(_ -> signUpButton.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-text-fill: #EEEEEE;" +
+                        "-fx-background-color: #393E46;" +
+                        "-fx-effect: dropshadow(gaussian, #0000004F, 10, 0, 1, 1);"
+        ));
         signUpButton.setOnAction(_ -> signUp(tcgApplication));
         VBox.setMargin(signUpButton, new Insets(0, 0, 5, 0));
 
@@ -92,7 +120,7 @@ public class SignUpPane extends GridPane {
 
         // signUpVBox Config
         VBox signUpVBox = new VBox();
-        signUpVBox.getChildren().addAll(title, subtitle, username, password, signUpButton, errorRespond);
+        signUpVBox.getChildren().addAll(title, subtitle, username, password, confirmPassword, signUpButton, errorRespond);
         signUpVBox.setAlignment(Pos.CENTER);
 
         // signInStackPane Config
@@ -124,8 +152,11 @@ public class SignUpPane extends GridPane {
     // Sign up method
     public void signUp(TCGApplication tcgApplication) {
         String[] data = new String[] {username.getText(), password.getText()};
-        if (data[0].isEmpty() || data[1].isEmpty()) {
-            errorRespond.setText("Please fill all information!");
+        if (data[0].isEmpty() || data[1].isEmpty() || confirmPassword.getText().isEmpty()) {
+            errorRespond.setText("Please fill in all the information!");
+        }
+        else if (!password.getText().equals(confirmPassword.getText())) {
+            errorRespond.setText("Password doesn't match!");
         }
         else {
             if (tcgApplication.getSQLConnector().addUser(data[0], data[1])) {
@@ -135,7 +166,7 @@ public class SignUpPane extends GridPane {
                 tcgApplication.setPrimaryStage(tcgApplication.getShopScene());
             }
             else {
-                errorRespond.setText("Username exists");
+                errorRespond.setText("Username exists!");
             }
         }
     }

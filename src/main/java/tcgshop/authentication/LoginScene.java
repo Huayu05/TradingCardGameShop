@@ -34,7 +34,7 @@ public class LoginScene extends Scene {
 
         // Main Login and Signin Container
         loginMain = new StackPane();
-        loginMain.setStyle("-fx-background-color: #FFFDE7;-fx-background-radius: 20px;-fx-effect: dropshadow(gaussian, #0000006F, 30, 0.5, 0, 0);");
+        loginMain.setStyle("-fx-background-color: #EEEEEE;-fx-background-radius: 20px;-fx-effect: dropshadow(gaussian, #0000006F, 30, 0.5, 0, 0);");
         loginMain.setMinSize(600, 360);
         loginMain.setMaxSize(900, 540);
         loginMain.setPadding(new Insets(0, 50, 0 ,50));
