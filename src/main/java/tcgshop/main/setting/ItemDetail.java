@@ -45,14 +45,38 @@ public class ItemDetail {
 
     public void editDetail() {
         ItemBox itemBox = new ItemBox(tcgApplication.getShopScene().getShopPane(), item);
-        Label editLabel = new Label("Edit Item's Details Here :");
+        Label editLabel = new Label("Edit Item's Details");
+        editLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 24;"
+        );
         Label nameLabel = new Label("Name :");
+        nameLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemName = new TextField(name);
         itemName.setPromptText("Maximum 20 Characters");
         Label priceLabel = new Label("Price :");
+        priceLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemPrice = new TextField(String.valueOf(price));
         itemPrice.setPromptText("Maximum RM10000.00");
         Label quantityLabel = new Label("Quantity :");
+        quantityLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemQuantity = new TextField(String.valueOf(quantity));
         itemQuantity.setPromptText("Maximum 1000 pcs");
         Button editButton = new Button("Edit");
@@ -63,6 +87,7 @@ public class ItemDetail {
         hbox.setSpacing(10);
 
         GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.add(nameLabel, 0, 0);
@@ -76,10 +101,11 @@ public class ItemDetail {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(editLabel, grid, hbox);
 
-        StackPane stackPane = new StackPane(vBox);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(vBox);
         StackPane.setMargin(vBox, new Insets(20));
 
-        Scene editScene = new Scene(stackPane);
+        Scene editScene = new Scene(stackPane, 300, 200);
         Stage editStage = new Stage();
         editStage.setScene(editScene);
         editStage.setResizable(false);

@@ -1,17 +1,16 @@
 package tcgshop.main.setting;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
 import tcgshop.utils.GeneralFunction;
 
@@ -33,41 +32,87 @@ public class SalesSetting extends VBox {
 
         Label option0 = new Label("Items Sales Count");
         option0.setOnMouseClicked(e -> setItemSalesCount("All"));
+        option0.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Separator separator0 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator0, Priority.ALWAYS);
         Label option1 = new Label("Item Sales Amount");
         option1.setOnMouseClicked(e -> setItemSalesAmount("All"));
+        option1.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Separator separator1 = new Separator(Orientation.VERTICAL);
+        separator1.setMinHeight(30);
         HBox.setHgrow(separator1, Priority.ALWAYS);
         Label option2 = new Label("Category Sales Count");
         option2.setOnMouseClicked(e -> setCategorySalesCount());
+        option2.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Separator separator2 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator2, Priority.ALWAYS);
         Label option3 = new Label("Category Sales Amount");
         option3.setOnMouseClicked(e -> setCategorySalesAmount());
+        option3.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Separator separator3 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator3, Priority.ALWAYS);
         Label option4 = new Label("All Sales Details");
         option4.setOnMouseClicked(e -> setSalesDetails(true));
+        option4.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Separator separator4 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator4, Priority.ALWAYS);
         Label option5 = new Label("User Amount");
         option5.setOnMouseClicked(e -> setUserAmount());
-        Separator separator5 = new Separator(Orientation.VERTICAL);
-        HBox.setHgrow(separator5, Priority.ALWAYS);
+        option5.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
 
-        HBox optionBar = new HBox(10, option0, separator0, option1, separator1, option2, separator2, option3, separator3, option4, separator4, option5, separator5);
-        ScrollPane scrollPane = new ScrollPane(optionBar);
+        HBox optionBar = new HBox(10, option0, separator0, option1, separator1, option2, separator2, option3, separator3, option4, separator4, option5);
+        optionBar.setAlignment(Pos.CENTER);
+        optionBar.setPadding(new Insets(0, 0, 20, 0));
+        optionBar.setStyle("-fx-background-color: #FFFFFF;");
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setContent(optionBar);
         scrollPane.setStyle("-fx-background-color: #FFFFFF;");
-
         topBar = new HBox(10, scrollPane);
+        topBar.setAlignment(Pos.CENTER);
+        topBar.setStyle("-fx-background-color: #FFFFFF;");
+        topBar.setMinHeight(50);
+        topBar.setMaxHeight(50);
+        VBox.setVgrow(topBar, Priority.ALWAYS);
 
         Separator separatorMain = new Separator();
+        separatorMain.setStyle("-fx-border-width: 5");
         VBox.setVgrow(separatorMain, Priority.ALWAYS);
         showPane = new StackPane();
         VBox.setVgrow(showPane, Priority.ALWAYS);
 
         this.getChildren().addAll(topBar, separatorMain, showPane);
+        this.setStyle("-fx-background-color: #FFFFFF;");
         StackPane.setMargin(this, new Insets(20));
     }
 
@@ -91,6 +136,8 @@ public class SalesSetting extends VBox {
         BarChart<String, Number> barChart = createBarChart("Item Name", "Item(s) Sold", 1, "Item(s) Sold by Item", tcgApplication.getSQLConnector().getItemSales(categoryStr), 0, 1);
         showPane.getChildren().clear();
         showPane.getChildren().add(barChart);
+
+
     }
 
 
@@ -176,6 +223,7 @@ public class SalesSetting extends VBox {
         tableView.getColumns().addAll(nameCol, countCol, priceCol);
         tableView.getColumns().forEach(col -> col.setReorderable(false));
 
+        StackPane.setMargin(tableView, new Insets(20));
         showPane.getChildren().clear();
         showPane.getChildren().add(tableView);
     }

@@ -31,6 +31,19 @@ public class ItemSetting extends VBox {
 
         this.tcgApplication = tcgApplication;
 
+        Label title = new Label("Item Setting");
+        title.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 24;"
+        );
+        HBox hbox = new HBox(title);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.prefWidthProperty().bind(this.widthProperty());
+        hbox.setSpacing(10);
+        this.getChildren().add(hbox);
+
         TableView<ItemDetail> itemTable = new TableView<>();
 
         TableColumn<ItemDetail, String> nameCol = new TableColumn<>("Item Name");
@@ -151,14 +164,35 @@ public class ItemSetting extends VBox {
     }
 
     public void addNewItem() {
-        Label editLabel = new Label("Enter New Item's Details Here :");
+        Label editLabel = new Label("Enter New Item's Details Here");
+        editLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 24;"
+        );
         Label nameLabel = new Label("Name :");
+        nameLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemName = new TextField();
         itemName.setPromptText("Maximum 20 Characters");
         Label priceLabel = new Label("Price :");
+        priceLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemPrice = new TextField();
         itemPrice.setPromptText("Maximum RM10000.00");
         Label quantityLabel = new Label("Quantity :");
+        quantityLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField itemQuantity = new TextField();
         itemQuantity.setPromptText("Maximum 1000 pcs");
         Button addButton = new Button("Edit");
@@ -176,6 +210,7 @@ public class ItemSetting extends VBox {
 
 
         GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.add(nameLabel, 0, 0);
@@ -250,11 +285,22 @@ public class ItemSetting extends VBox {
         vBox.setAlignment(Pos.CENTER);
 
         Label label = new Label("Choose Category to Edit");
+        label.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 24;"
+        );
         ObservableList<String> category = FXCollections.observableArrayList();
         ListView<String> listView = new ListView<>(category);
         category.addAll(tcgApplication.getSQLConnector().getCategory());
 
         Label editLabel = new Label("Change Name:");
+        editLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
         TextField editField = new TextField();
         editField.setDisable(true);
 
@@ -266,7 +312,7 @@ public class ItemSetting extends VBox {
         Button removeButton = new Button("Remove");
         removeButton.setDisable(true);
         Button cancelButton = new Button("Exit");
-        HBox hbox2 = new HBox(editButton, removeButton, cancelButton);
+        HBox hbox2 = new HBox(10, editButton, removeButton, cancelButton);
         hbox2.setAlignment(Pos.CENTER);
 
         listView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -276,9 +322,10 @@ public class ItemSetting extends VBox {
             removeButton.setDisable(false);
         });
 
+        vBox.setPadding(new Insets(0, 20, 0, 20));
         vBox.getChildren().addAll(label, listView, hbox, hbox2);
 
-        Scene editCategoryScene = new Scene(vBox);
+        Scene editCategoryScene = new Scene(vBox, 400, 600);
         Stage editCategoryStage = new Stage();
         editCategoryStage.setScene(editCategoryScene);
         editCategoryStage.setResizable(false);
