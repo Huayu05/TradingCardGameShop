@@ -21,6 +21,7 @@ public class SalesSetting extends VBox {
     private TCGApplication tcgApplication;
     private StackPane showPane;
     private HBox topBar;
+    private ArrayList<Label> optionList = new ArrayList<>();
     private ComboBox<String> comboBox1 = null;
     private ComboBox<String> comboBox2 = null;
     private ComboBox<String> comboBox3 = null;
@@ -31,59 +32,93 @@ public class SalesSetting extends VBox {
         this.tcgApplication = tcgApplication;
 
         Label option0 = new Label("Items Sales Count");
-        option0.setOnMouseClicked(e -> setItemSalesCount("All"));
-        option0.setStyle(
-                "-fx-font-family: verdana;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #000000;" +
-                        "-fx-font-size: 16;"
-        );
+        option0.setOnMouseClicked(e -> {
+            setItemSalesCount("All");
+            resetStyle();
+            option0.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
+
         Separator separator0 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator0, Priority.ALWAYS);
         Label option1 = new Label("Item Sales Amount");
-        option1.setOnMouseClicked(e -> setItemSalesAmount("All"));
-        option1.setStyle(
-                "-fx-font-family: verdana;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #000000;" +
-                        "-fx-font-size: 16;"
-        );
+        option1.setOnMouseClicked(e -> {
+            setItemSalesAmount("All");
+            resetStyle();
+            option1.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
         Separator separator1 = new Separator(Orientation.VERTICAL);
         separator1.setMinHeight(30);
         HBox.setHgrow(separator1, Priority.ALWAYS);
         Label option2 = new Label("Category Sales Count");
-        option2.setOnMouseClicked(e -> setCategorySalesCount());
-        option2.setStyle(
-                "-fx-font-family: verdana;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #000000;" +
-                        "-fx-font-size: 16;"
-        );
+        option2.setOnMouseClicked(e -> {
+            setCategorySalesCount();
+            resetStyle();
+            option2.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
         Separator separator2 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator2, Priority.ALWAYS);
         Label option3 = new Label("Category Sales Amount");
-        option3.setOnMouseClicked(e -> setCategorySalesAmount());
-        option3.setStyle(
-                "-fx-font-family: verdana;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #000000;" +
-                        "-fx-font-size: 16;"
-        );
+        option3.setOnMouseClicked(e -> {
+            setCategorySalesAmount();
+            resetStyle();
+            option3.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
         Separator separator3 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator3, Priority.ALWAYS);
         Label option4 = new Label("All Sales Details");
-        option4.setOnMouseClicked(e -> setSalesDetails(true));
-        option4.setStyle(
-                "-fx-font-family: verdana;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #000000;" +
-                        "-fx-font-size: 16;"
-        );
+        option4.setOnMouseClicked(e -> {
+            setSalesDetails(true);
+            resetStyle();
+            option4.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
         Separator separator4 = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator4, Priority.ALWAYS);
         Label option5 = new Label("User Amount");
-        option5.setOnMouseClicked(e -> setUserAmount());
-        option5.setStyle(
+        option5.setOnMouseClicked(e -> {
+            setUserAmount();
+            resetStyle();
+            option5.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        });
+
+        optionList.add(option0);
+        optionList.add(option1);
+        optionList.add(option2);
+        optionList.add(option3);
+        optionList.add(option4);
+        optionList.add(option5);
+
+        resetStyle();
+        option0.setStyle(
                 "-fx-font-family: verdana;" +
                         "-fx-font-weight: bold;" +
                         "-fx-text-fill: #000000;" +
@@ -111,9 +146,21 @@ public class SalesSetting extends VBox {
         showPane = new StackPane();
         VBox.setVgrow(showPane, Priority.ALWAYS);
 
+        setItemSalesCount("All");
+
         this.getChildren().addAll(topBar, separatorMain, showPane);
         this.setStyle("-fx-background-color: #FFFFFF;");
         StackPane.setMargin(this, new Insets(20));
+    }
+
+    public void resetStyle() {
+        for (Label l : optionList) {
+            l.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 16;"
+            );
+        }
     }
 
     public void setItemSalesCount(String categoryStr) {
