@@ -1,13 +1,9 @@
 package tcgshop.main.setting;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
 import tcgshop.utils.GeneralFunction;
 
@@ -38,7 +34,7 @@ public class DiscountSetting extends StackPane {
             return null;
         };
 
-        Label title = new Label("Change Tax and Discount Percentage Here ");
+        Label title = new Label("Tax and Discount Setting");
         title.setStyle(
                 "-fx-font-family: verdana;" +
                         "-fx-font-weight: bold;" +
@@ -56,6 +52,7 @@ public class DiscountSetting extends StackPane {
         );
 
         taxPercentField = new TextField();
+        taxPercentField.setMaxWidth(200);
         taxPercentField.setPromptText("0 to 100 only");
         taxPercentField.setTextFormatter(new TextFormatter<>(filter));
 
@@ -67,31 +64,49 @@ public class DiscountSetting extends StackPane {
         );
 
         discountPercentField = new TextField();
+        discountPercentField.setMaxWidth(200);
         discountPercentField.setPromptText("0 to 100 only");
         discountPercentField.setTextFormatter(new TextFormatter<>(filter));
 
         Button submit = new Button("Change Tax / Discount");
+        Label errorLabel = new Label("");
+
         submit.setOnAction(e -> {
-            GeneralFunction.saveTax(Integer.parseInt(taxPercentField.getText()));
-            GeneralFunction.saveDiscount(Integer.parseInt(discountPercentField.getText()));
+            if (!(taxPercentField.getText().isEmpty() || discountPercentField.getText().isEmpty())) {
+                GeneralFunction.saveTax(Integer.parseInt(taxPercentField.getText()));
+                GeneralFunction.saveDiscount(Integer.parseInt(discountPercentField.getText()));
+                errorLabel.setText("Tax and Discount Setting changed!");
+                errorLabel.setStyle(
+                        "-fx-font-family: verdana;" +
+                                "-fx-text-fill: green;" +
+                                "-fx-font-size: 10;"
+                );
+            }
+            else {
+                errorLabel.setText("Invalid input!");
+                errorLabel.setStyle(
+                        "-fx-font-family: verdana;" +
+                                "-fx-text-fill: red;" +
+                                "-fx-font-size: 10;"
+                );
+            }
         });
-        GridPane.setHalignment(submit, HPos.CENTER);
-        GridPane.setValignment(submit, VPos.CENTER);
-        GridPane.setMargin(submit, new Insets(10));
+
 
 
         GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.add(title, 0, 0, 2, 1);
-        grid.add(taxPercentLabel, 0, 1);
-        grid.add(taxPercentField, 1, 1);
-        grid.add(discountPercentLabel, 0, 2);
-        grid.add(discountPercentField, 1, 2);
-        grid.add(submit, 0, 3, 2, 1);
+        grid.add(taxPercentLabel, 0, 0);
+        grid.add(taxPercentField, 1, 0);
+        grid.add(discountPercentLabel, 0, 1);
+        grid.add(discountPercentField, 1, 1);
 
-        this.getChildren().addAll(grid);
-        StackPane.setAlignment(grid, Pos.CENTER);
+        VBox mainBox = new VBox(20, title, grid, submit, errorLabel);
+        mainBox.setAlignment(Pos.CENTER);
+
+        this.getChildren().addAll(mainBox);
         this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
     }
 }

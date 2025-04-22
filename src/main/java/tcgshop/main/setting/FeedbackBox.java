@@ -19,8 +19,19 @@ public class FeedbackBox extends VBox {
         LocalDateTime ldt = ts.toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MMMM d, h.mma", Locale.ENGLISH);
         String formatted = ldt.format(formatter);
-        Label detailsLabel = new Label(feedback.get(1).toString() + " (" + formatted + ")");
+        Label detailsLabel = new Label(feedback.get(1).toString() + "  @  " + formatted);
+        detailsLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 16;"
+        );
         Label feedbackLabel = new Label(feedback.getFirst().toString());
+        feedbackLabel.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 12;"
+        );
 
         this.getChildren().addAll(detailsLabel, feedbackLabel);
         VBox.setMargin(this, new Insets(20, 20, 0, 20));
