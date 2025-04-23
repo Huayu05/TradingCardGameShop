@@ -39,8 +39,19 @@ public class FeedbackShow extends VBox {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         allFeedback.prefWidthProperty().bind(scrollPane.widthProperty());
 
+        Label title = new Label("Feedback From Users");
+        title.setPadding(new Insets(20, 20, 0, 20));
+        title.setStyle(
+                "-fx-font-family: verdana;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #000000;" +
+                        "-fx-font-size: 24;"
+        );
+
+        VBox mainBox = new VBox(title, scrollPane);
+
         StackPane.setMargin(this, new Insets(10));
-        this.getChildren().add(scrollPane);
+        this.getChildren().add(mainBox);
         this.setStyle("-fx-background-color: #FFFFFF;");
     }
 }
