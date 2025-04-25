@@ -55,6 +55,9 @@ public class ItemSetting extends VBox {
         TableColumn<ItemDetail, Integer> quantityCol = new TableColumn<>("Quantity");
         quantityCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
 
+        TableColumn<ItemDetail, String> categoryNameCol = new TableColumn<>("Category Name");
+        categoryNameCol.setCellValueFactory((data -> new SimpleStringProperty(data.getValue().getCategory())));
+
         TableColumn<ItemDetail, Void> actionCol = new TableColumn<>("");
         Callback<TableColumn<ItemDetail, Void>, TableCell<ItemDetail, Void>> cellFactory = param -> new TableCell<>() {
             private final Button previewBtn = new Button("Preview");
@@ -99,7 +102,7 @@ public class ItemSetting extends VBox {
         actionCol.setCellFactory(cellFactory);
 
 
-        itemTable.getColumns().addAll(nameCol, priceCol, quantityCol, actionCol);
+        itemTable.getColumns().addAll(nameCol, categoryNameCol, priceCol, quantityCol, actionCol);
         itemTable.getColumns().forEach(col -> col.setReorderable(false));
 
         ObservableList<ItemDetail> data = FXCollections.observableArrayList();
@@ -195,7 +198,7 @@ public class ItemSetting extends VBox {
         );
         TextField itemQuantity = new TextField();
         itemQuantity.setPromptText("Maximum 1000 pcs");
-        Button addButton = new Button("Edit");
+        Button addButton = new Button("Add");
         Button cancelButton = new Button("Cancel");
         Label categoryLabel = new Label("Category :");
         ComboBox<String> comboBox = new ComboBox<>();

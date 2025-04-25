@@ -152,11 +152,10 @@ public class SQLConnector {
 
         // If category is All, change query to retrieve all items
         if (category.equals("All")) {
-            query = "SELECT * FROM items ORDER BY `ItemName`";
+            query = "SELECT * FROM items i JOIN categories c ON i.CategoryID=c.CategoryID ORDER BY `ItemName` ";
         }
         else {
-            query = "SELECT * FROM tcgshopdb.items LEFT JOIN categories ON items.CategoryID = categories.CategoryID " +
-                    "WHERE CategoryName = ? ORDER BY `ItemName`;";
+            query = "SELECT * FROM tcgshopdb.items LEFT JOIN categories ON items.CategoryID = categories.CategoryID WHERE CategoryName = ? ORDER BY `ItemName`;";
         }
 
         // Execute queries, add all data into array list
@@ -171,6 +170,7 @@ public class SQLConnector {
                     item.add(rs.getString("ItemName"));
                     item.add(rs.getDouble("ItemPrice"));
                     item.add(rs.getInt("ItemLeft"));
+                    item.add(rs.getString("CategoryName"));
                     itemsList.add(item);
                 }
             }
@@ -371,7 +371,7 @@ public class SQLConnector {
 
 
     // Edit items detail for admin
-    public boolean editItem(String name, String priceStr, String countStr, ArrayList<Object> item) {
+    public boolean editItem(String name, String priceStr, String countStr, String category, ArrayList<Object> item) {
         if (conn == null) {
             System.out.println(" ERROR: No MySQL connection available.");
             return false;
@@ -380,7 +380,7 @@ public class SQLConnector {
         double price;
         int count;
 
-        if (name.length() > 20 || name.isEmpty()) {
+        if (name.length() > 20 || name.isEmpty() || category.isEmpty()) {
             return false;
         }
         try {
@@ -403,13 +403,14 @@ public class SQLConnector {
         }
 
 
-        String query = "UPDATE items SET `ItemName` = ?, `ItemPrice` = ?, `ItemLeft` = ? WHERE `ItemID` = ?;";
+        String query = "UPDATE items SET `ItemName` = ?, `ItemPrice` = ?, `ItemLeft` = ?, `CategoryID` = (SELECT `CategoryID` FROM categories WHERE 'CategoryName' = ?) WHERE `ItemID` = ?;";
 
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, name);
             stmt.setDouble(2, price);
             stmt.setInt(3, count);
             stmt.setInt(4, (Integer) item.getFirst());
+            stmt.setString(5, category);
             stmt.executeUpdate();
             return true;
         }
@@ -449,7 +450,7 @@ public class SQLConnector {
         double price;
         int count;
 
-        if (name.length() > 20 || name.isEmpty()) {
+        if (name.length() > 20 || name.isEmpty() || category.isEmpty()) {
             return false;
         }
         try {

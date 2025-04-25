@@ -9,10 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import tcgshop.TCGApplication;
 
 import java.util.ArrayList;
@@ -86,9 +83,18 @@ public class AccountSetting extends HBox {
         Separator separator = new Separator(Orientation.VERTICAL);
         HBox.setHgrow(separator, Priority.ALWAYS);
 
+        Region spacer1 = new Region();
+        HBox.setHgrow(spacer1, Priority.ALWAYS);
+        Region spacer2 = new Region();
+        HBox.setHgrow(spacer2, Priority.ALWAYS);
+        Region spacer3 = new Region();
+        HBox.setHgrow(spacer3, Priority.ALWAYS);
+        Region spacer4 = new Region();
+        HBox.setHgrow(spacer4, Priority.ALWAYS);
+
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
-        this.getChildren().addAll(userVBox, separator, adminVBox);
+        this.getChildren().addAll(spacer3, userVBox, spacer1, separator, spacer2, adminVBox, spacer4);
         StackPane.setMargin(this, new Insets(10));
     }
 }

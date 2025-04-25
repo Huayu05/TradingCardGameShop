@@ -24,15 +24,23 @@ public class FeedbackShow extends VBox {
                 feedbackBox.prefWidthProperty().bind(allFeedback.widthProperty());
                 allFeedback.getChildren().add(feedbackBox);
             }
+            Region spacer = new Region();
+            spacer.setMinHeight(20);
+            allFeedback.getChildren().add(spacer);
         }
         else {
             Label noFeedbackLabel = new Label("No Feedback Available Now");
+            noFeedbackLabel.setPadding(new Insets(20));
+            noFeedbackLabel.setStyle(
+                    "-fx-font-family: verdana;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-text-fill: #000000;" +
+                            "-fx-font-size: 14;"
+            );
             allFeedback.getChildren().add(noFeedbackLabel);
         }
 
-        Region spacer = new Region();
-        spacer.setMinHeight(20);
-        allFeedback.getChildren().add(spacer);
+
 
         ScrollPane scrollPane = new ScrollPane(allFeedback);
         scrollPane.setStyle("-fx-background-color: #FFFFFF");

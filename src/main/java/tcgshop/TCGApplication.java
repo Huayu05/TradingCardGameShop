@@ -35,7 +35,7 @@ public class TCGApplication extends Application {
         loginScene = new LoginScene(this, 1000, 600);
 
         // Stage config
-        primaryStage.setScene(mainScene);
+        primaryStage.setScene(loginScene);
         primaryStage.setTitle("Trading Card Game Shop");
         primaryStage.setMinHeight(650);
         primaryStage.setMinWidth(1000);

@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -30,9 +31,11 @@ public class ItemDetail {
     private TCGApplication tcgApplication;
     private String picturePath = System.getProperty("user.dir") + "\\item_pictures\\";
     private ArrayList<Object> item;
+    private ComboBox<String> comboBox;
     private String name;
     private double price;
     private int quantity;
+    private String category;
 
     public ItemDetail(TCGApplication tcgApplication, ArrayList<Object> item) {
         this.tcgApplication = tcgApplication;
@@ -41,6 +44,7 @@ public class ItemDetail {
         picturePath = picturePath + name;
         this.price = (double) item.get(2);
         this.quantity = (int) item.get(3);
+        this.category = (String) item.get(4);
     }
 
     public void editDetail() {
@@ -79,6 +83,13 @@ public class ItemDetail {
         );
         TextField itemQuantity = new TextField(String.valueOf(quantity));
         itemQuantity.setPromptText("Maximum 1000 pcs");
+        Label categoryLabel = new Label("Category :");
+        comboBox = new ComboBox<>();
+        for (String category : tcgApplication.getSQLConnector().getCategory()) {
+            comboBox.getItems().addAll(category);
+        }
+        comboBox.setEditable(true);
+        comboBox.setValue(category);
         Button editButton = new Button("Edit");
         Button cancelButton = new Button("Cancel");
 
@@ -96,6 +107,8 @@ public class ItemDetail {
         grid.add(itemPrice, 1, 1);
         grid.add(quantityLabel, 0, 2);
         grid.add(itemQuantity, 1, 2);
+        grid.add(categoryLabel, 0, 3);
+        grid.add(comboBox, 1, 3);
 
         VBox vBox = new VBox(10);
         vBox.setAlignment(Pos.CENTER);
@@ -114,7 +127,7 @@ public class ItemDetail {
 
         cancelButton.setOnAction(event -> editStage.close());
         editButton.setOnAction(event -> {
-            boolean status = tcgApplication.getSQLConnector().editItem(itemName.getText(), itemPrice.getText(), itemQuantity.getText(), item);
+            boolean status = tcgApplication.getSQLConnector().editItem(itemName.getText(), itemPrice.getText(), itemQuantity.getText(), comboBox.getValue(), item);
             popupWindow(status);
             if (status) {
                 editStage.close();
@@ -219,6 +232,10 @@ public class ItemDetail {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setName(String name) {
